@@ -13,11 +13,11 @@ namespace ST
 
 
 
+	class RenderObject;
 
 	class Window;
 	class WindowFactory;
 	class WindowManager;
-	class WindowRenderer;
 
 }
 

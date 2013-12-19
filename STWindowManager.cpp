@@ -24,6 +24,7 @@ WindowManager::~WindowManager()
 void WindowManager::initializeScript()
 {
 	mTouten.loadFile(L"WindowManager.tt");
+
 	
 	
 	mBind.call<void>(INITIALIZE_WINDOW_MANAGER);

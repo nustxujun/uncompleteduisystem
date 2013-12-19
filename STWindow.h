@@ -12,10 +12,21 @@ namespace ST
 
 		const String& getName()const;
 		const WindowFactory* getFactory()const;
+
+		Window* createChild(const String& name);
+		Window* getChild(const String& name);
+		void destroyChild(const String& name);
+
+		void draw();
 	private:
 		String mName;
 		const WindowFactory* mFactory;
-		WindowRenderer* mRenderer;
+		WindowManager* mManager;
+		RenderObject* mRenderObject;
+
+		using Childs = std::hash_map<String, Window>;
+		Childs mChilds;
+
 	};
 
 	class WindowFactory

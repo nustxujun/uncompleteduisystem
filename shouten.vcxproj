@@ -87,6 +87,7 @@
     <ClInclude Include="STCommon.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="STException.h" />
+    <ClInclude Include="STRenderObject.h" />
     <ClInclude Include="STScriptObjectDefinition.h" />
     <ClInclude Include="STWindow.h" />
     <ClInclude Include="STWindowManager.h" />
