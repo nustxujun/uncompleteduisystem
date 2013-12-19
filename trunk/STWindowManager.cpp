@@ -1,0 +1,102 @@
+#include "STWindowManager.h"
+#include "STScriptObjectDefinition.h"
+#include "STException.h"
+
+using namespace ST;
+
+WindowManager::WindowManager():
+	mBind(&mTouten)
+{
+	registerFactory(DefaultWinFactory::NAME,&mDefaultFactory);
+
+	initializeScript();
+}
+
+WindowManager::~WindowManager()
+{
+	std::for_each(mWindows.begin(), mWindows.end(), [](Windows::value_type e){
+		delete e.second;
+	});
+
+	uninitialzeScript();
+}
+
+void WindowManager::initializeScript()
+{
+	mTouten.loadFile(L"WindowManager.tt");
+	
+	
+	mBind.call<void>(INITIALIZE_WINDOW_MANAGER);
+}
+
+void WindowManager::uninitialzeScript()
+{
+	mTouten.call(UNINITIALIZE_WINDOW_MANAGER);
+}
+
+Window* WindowManager::createWindow(const String& name, const CustomParameters* paras, const String& factory )
+{
+	auto fac = mFactorys.find(factory);
+	if (fac == mFactorys.end())
+	{
+		ST_EXCEPT(L"Cant find specify factory", L"WindowManager");
+		return nullptr;
+	}
+
+	if (isWindowExisted(name))
+	{
+		ST_EXCEPT(L"specify window is existed", L"WindowManager");
+		return nullptr;
+	}
+	
+	Window* win = fac->second->createWindowImpl(name, paras);
+	mWindows.insert(Windows::value_type(name, win));
+	return win;
+}
+
+Window* WindowManager::getWindow(const String& name)
+{
+	auto win = mWindows.find(name);
+	if (win == mWindows.end())
+	{
+		ST_EXCEPT(L"specify window is not existed", L"WindowManager");
+		return nullptr;		
+	}
+	return win->second;
+}
+
+void WindowManager::destroyWindow(const String& name)
+{
+	auto win = mWindows.find(name);
+	if (win == mWindows.end()) return;
+
+	win->second->getFactory()->destroyWindowImpl(win->second);
+	mWindows.erase(win);
+}
+
+void WindowManager::registerFactory(const String& name, WindowFactory* factory)
+{
+	auto ret = mFactorys.insert(Factorys::value_type(name, factory));
+	if (!ret.second)
+		ST_EXCEPT(L"specify factory is existed", L"WindowManager::registerFactory");
+}
+
+WindowFactory* WindowManager::unregisterFactory(const String& name)
+{
+	auto ret = mFactorys.find(name);
+	if (ret != mFactorys.end())
+	{
+		WindowFactory* wf = ret->second;
+		mFactorys.erase(ret);
+		return wf;
+	}
+
+	ST_EXCEPT(L"specify factory is not existed", L"WindowManager::unregisterFactory");
+	return nullptr;
+}
+
+bool WindowManager::isWindowExisted(const String& name)const
+{
+	return mWindows.find(name) != mWindows.end();
+}
+
