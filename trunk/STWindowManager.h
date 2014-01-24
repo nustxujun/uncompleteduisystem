@@ -2,19 +2,17 @@
 #define _STWindowManager_H_
 
 #include "STCommon.h"
-#include "STWindow.h"
-#include "Touten.h"
-#include "TTBind.h"
+#include "STWindowFactory.h"
 
 namespace ST
 {
-	class WindowManager
+	class ShoutenExport WindowManager
 	{
 	public :
 		WindowManager();
 		~WindowManager();
 
-		Window* createWindow(const String& name, const CustomParameters* paras = 0, const String& factory = DefaultWinFactory::NAME);
+		Window* createWindow(const String& name, const CustomParameters* paras = nullptr, const String& factory = DefaultWinFactory::NAME);
 		Window* getWindow(const String& name);
 		void destroyWindow(const String& name);
 
@@ -25,10 +23,8 @@ namespace ST
 
 		void initializeScript();
 		void uninitialzeScript();
-	private:
-		TT::Touten mTouten;
-		TT::Bind mBind;
 
+	private:
 		typedef std::map<String , WindowFactory*> Factorys;
 		Factorys mFactorys;
 

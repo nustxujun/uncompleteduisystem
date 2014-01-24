@@ -5,12 +5,17 @@
 
 namespace ST
 {
-	const String SCRIPT_WINDOW_MANAGER = L"ShoutenScriptWindowManager";//script window manager instance
+	class ShoutenExport ScriptObject
+	{
+	public:
+		static const Char* SCRIPT_WINDOW_MANAGER;
 
-	const String INITIALIZE_WINDOW_MANAGER = L"initializeWindowManager";//init function
-	const String UNINITIALIZE_WINDOW_MANAGER = L"uninitializeWindowManager";//uninit function
-	const String GET_WINDOW_MANAGER = L"getWindowManager";
+		static const Char* INITIALIZE_WINDOW_MANAGER;
+		static const Char* UNINITIALIZE_WINDOW_MANAGER;
+		static const Char* GET_WINDOW_MANAGER;
 
+		static const Char* ADD_WINDOW_FUNCTION;
+	};
 }
 
 #endif

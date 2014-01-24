@@ -1,15 +1,50 @@
 #include "STWindow.h"
+#include "STWindowManager.h"
+#include "STRenderObject.h"
+#include "STWindowProperty.h"
+#include "Touten.h"
+#include "TTBind.h"
+#include "STWindowHelper.h"
+#include "STWindowSystem.h"
+#include "STBasicImage.h"
 
 using namespace ST;
 
-Window::Window(const String& name, const CustomParameters* paras, const WindowFactory* f):
-	mName(name), mFactory(f)
+Window::Window(const String& name, const WindowFactory* f, WindowManager* wm) :
+	mName(name), mFactory(f), mManager(wm)
 {
+	mPropertys[WindowProperty::PROPERTY_NULL] = WindowProperty::PROPERTY_NULL;
 }
 
 Window::~Window()
 {
+	uninitialize();
+}
 
+void Window::unregisterFunction(const String& name)
+{
+	String realName = mName + L"::" + name;
+
+	TT::Bind* bind = WindowSystem::getSingleton().getScriptBind();
+	bind->remove(realName);
+}
+
+void Window::initializeScript()
+{
+	WindowHelper helper;
+	helper.registerFunction(
+		*WindowSystem::getSingleton().getScriptBind(), L"close", this, &Window::close);
+
+}
+
+void Window::uninitializeScript()
+{
+	TT::Bind* bind = WindowSystem::getSingleton().getScriptBind();
+	std::for_each(mFuncNames.begin(), mFuncNames.end(), [&bind](const String& name)
+	{
+		bind->remove(name);
+	});
+	mFuncNames.clear();
 }
 
 const WindowFactory* Window::getFactory()const
@@ -17,15 +52,214 @@ const WindowFactory* Window::getFactory()const
 	return mFactory;
 }
 
-
-const String DefaultWinFactory::NAME = L"DefaultWinFactory";
-
-Window* DefaultWinFactory::createWindowImpl(const String& name, const CustomParameters* paras)const
+void Window::parseParameter(const CustomParameters& paras)
 {
-	return new Window(name, paras, this);
+	auto end = paras.end();
+	WindowRenderer* renderer = nullptr;
+	{
+		auto ret = paras.find(WindowProperty::RENDERER);
+		if (ret != end)
+		{	
+			renderer = WindowSystem::getSingleton().getRenderer(ret->second);
+		}
+	}
+
+	{
+		auto ret = paras.find(WindowProperty::RENDER_OBJECT);
+		if (ret != end)
+		{
+		}
+		else if (paras.find(WindowProperty::BACKGROUND_TEXTURE) != end ||
+			paras.find(WindowProperty::BACKGROUND_COLOUR) != end)
+		{
+			mRenderObject = new BasicImage(this, renderer);
+		}
+		else
+			mRenderObject = new RenderObject(this, renderer);
+	}
+
+
 }
 
-void DefaultWinFactory::destroyWindowImpl(Window* window)const
+
+void Window::initialize(const CustomParameters* paras)
 {
-	delete window;
+	if (paras == nullptr)
+	{
+		CustomParameters temp;
+		parseParameter(temp);
+	}
+	else
+		parseParameter(*paras);
+
+	initializeScript();
+}
+
+void Window::uninitialize()
+{
+	uninitializeScript();
+
+	delete mRenderObject;
+}
+
+void Window::close()
+{
+	mManager->destroyWindow(mName);
+}
+
+void Window::draw()
+{
+	if (isDirty())
+	{
+		mRenderObject->notifyUpdateWindow();
+		mIsdirty = false;
+		mRenderObject->render();
+
+	}
+
+	std::for_each(mChilds.begin(), mChilds.end(), 
+		[](Childs::value_type& c)
+		{
+			c.second->draw();
+		});
+}
+
+const String& Window::getName()const
+{
+	return mName;
+}
+
+void Window::setProperty(const String& prop, const String& val)
+{
+	mPropertys[prop] = val;
+	dirty();
+}
+
+const String& Window::getProperty(const String& key)const
+{
+	auto ret = mPropertys.find(key);
+	if (ret == mPropertys.end())
+		return mPropertys.find(WindowProperty::PROPERTY_NULL)->second;
+
+	return ret->second;
+}
+
+Window* Window::getParent()
+{
+	return mParent;
+}
+
+const RectI& Window::getRect()const
+{
+	return mRect;
+}
+
+RectI Window::getAbsRect()const
+{
+	RectI rect = mRect;
+	if (mParent)
+	{	
+		const RectI& pr = mParent->getAbsRect();
+		rect.move(pr.left, pr.top);
+	}
+	return rect;
+}
+
+
+int Window::getX() const
+{
+	return mRect.left;
+}
+
+int Window::getY() const
+{
+	return mRect.top;
+}
+
+int Window::getAbsX() const
+{
+	int x = mRect.left;
+	if (mParent)
+	{
+		int px = mParent->getAbsX();
+		x += px;
+	}
+	return x;
+}
+
+int Window::getAbsY() const
+{
+	int y = mRect.top;
+	if (mParent)
+	{
+		int py = mParent->getAbsY();
+		y += py;
+	}
+	return y;
+}
+
+int Window::getWidth() const
+{
+	return mRect.width();
+}
+
+int Window::getHeight() const
+{
+	return mRect.height();
+}
+
+void Window::setRect(const RectI& r)
+{
+	mRect = r;
+	dirty();
+}
+
+void Window::setX(int x)
+{
+	mRect.moveTo(x, mRect.top);
+	dirty();
+}
+
+void Window::setY(int y)
+{
+	mRect.moveTo(mRect.left, y);
+	dirty();
+}
+
+void Window::setPosition(int x, int y)
+{
+	mRect.moveTo(x, y);
+	dirty();
+}
+
+void Window::setWidth(int w)
+{
+	mRect.setWidth(w);
+	dirty();
+}
+
+void Window::setHeight(int h)
+{
+	mRect.setHeight(h);
+	dirty();
+}
+
+void Window::setSize(int w, int h)
+{
+	mRect.setWidth(w);
+	mRect.setHeight(h);
+	dirty();
+}
+
+
+void Window::dirty()
+{
+	mIsdirty = true;
+	if (mParent)
+		mParent->dirty();
+}
+
+bool Window::isDirty() const
+{
+	return mIsdirty;
 }

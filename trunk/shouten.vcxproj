@@ -11,13 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{731EEEC4-DBF8-450F-9E2F-16D14D724865}</ProjectGuid>
+    <ProjectGuid>{BE6319D7-4E3B-4E80-A4F0-2EC58DD9C0CE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>shouten</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -51,7 +51,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions);SHOUTEN_NONCLIENT_BUILD</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../touten;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -70,7 +70,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions);SHOUTEN_NONCLIENT_BUILD</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -84,21 +84,49 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Shouten.h" />
+    <ClInclude Include="STBasicImage.h" />
+    <ClInclude Include="STColour.h" />
     <ClInclude Include="STCommon.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="STException.h" />
+    <ClInclude Include="STGeometry.h" />
+    <ClInclude Include="STPlatform.h" />
+    <ClInclude Include="STRect.h" />
     <ClInclude Include="STRenderObject.h" />
+    <ClInclude Include="STRenderState.h" />
+    <ClInclude Include="STRenderTarget.h" />
     <ClInclude Include="STScriptObjectDefinition.h" />
+    <ClInclude Include="STScriptSystem.h" />
+    <ClInclude Include="STSingleton.h" />
+    <ClInclude Include="STStringUtil.h" />
+    <ClInclude Include="STTexture.h" />
+    <ClInclude Include="STVector.h" />
+    <ClInclude Include="STVertex.h" />
     <ClInclude Include="STWindow.h" />
+    <ClInclude Include="STWindowFactory.h" />
+    <ClInclude Include="STWindowHelper.h" />
     <ClInclude Include="STWindowManager.h" />
+    <ClInclude Include="STWindowProperty.h" />
+    <ClInclude Include="STWindowRenderer.h" />
+    <ClInclude Include="STWindowSystem.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="shouten.cpp" />
+    <ClCompile Include="STBasicImage.cpp" />
+    <ClCompile Include="STColour.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="STException.cpp" />
+    <ClCompile Include="STGeometry.cpp" />
+    <ClCompile Include="STRenderObject.cpp" />
+    <ClCompile Include="STScriptObjectDefinition.cpp" />
+    <ClCompile Include="STStringUtil.cpp" />
     <ClCompile Include="STWindow.cpp" />
+    <ClCompile Include="STWindowFactory.cpp" />
     <ClCompile Include="STWindowManager.cpp" />
+    <ClCompile Include="STWindowProperty.cpp" />
+    <ClCompile Include="STWindowSystem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

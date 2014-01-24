@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Base">
+      <UniqueIdentifier>{a562de50-e728-457b-bae9-9441a055e66e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{6eac49ad-e17c-4017-aa77-617c8a6faca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\RenderObject">
+      <UniqueIdentifier>{6a6bb4f1-9afe-4802-863e-0c2a767d9b67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{302904d0-c6a6-4d40-8832-a309b1e75bbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,23 +36,80 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="STWindowManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="STCommon.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="STException.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="STScriptObjectDefinition.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="STWindow.h">
-      <Filter>头文件</Filter>
+      <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="STRenderObject.h">
-      <Filter>头文件</Filter>
+      <Filter>Render\RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="STScriptObjectDefinition.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STGeometry.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="STSingleton.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STTexture.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="STWindow.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STWindowFactory.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STWindowManager.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STWindowRenderer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="STWindowSystem.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STVertex.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="STColour.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="STVector.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="STBasicImage.h">
+      <Filter>Render\RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="STWindowProperty.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STRect.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="STStringUtil.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="STPlatform.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STScriptSystem.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STWindowHelper.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Shouten.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STRenderTarget.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="STRenderState.h">
+      <Filter>Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -48,16 +117,43 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="shouten.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="STException.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="STWindow.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="STWindowFactory.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="STWindowManager.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="STBasicImage.cpp">
+      <Filter>Render\RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="STRenderObject.cpp">
+      <Filter>Render\RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="STWindowSystem.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="STStringUtil.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="STScriptObjectDefinition.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="STWindowProperty.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="STColour.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="STGeometry.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

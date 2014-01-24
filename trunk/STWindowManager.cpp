@@ -1,15 +1,17 @@
 #include "STWindowManager.h"
 #include "STScriptObjectDefinition.h"
 #include "STException.h"
+#include "STWindow.h"
+#include "STWindowSystem.h"
 
 using namespace ST;
 
-WindowManager::WindowManager():
-	mBind(&mTouten)
+WindowManager::WindowManager()
 {
 	registerFactory(DefaultWinFactory::NAME,&mDefaultFactory);
 
 	initializeScript();
+
 }
 
 WindowManager::~WindowManager()
@@ -19,20 +21,21 @@ WindowManager::~WindowManager()
 	});
 
 	uninitialzeScript();
+
 }
 
 void WindowManager::initializeScript()
 {
-	mTouten.loadFile(L"WindowManager.tt");
-
+	WindowSystem& sys = WindowSystem::getSingleton();
+	sys.loadScript(L"WindowManager.tt");
+	sys.loadScript(L"Window.tt");
 	
-	
-	mBind.call<void>(INITIALIZE_WINDOW_MANAGER);
+	//mTouten->call(ScriptObject::INITIALIZE_WINDOW_MANAGER);
 }
 
 void WindowManager::uninitialzeScript()
 {
-	mTouten.call(UNINITIALIZE_WINDOW_MANAGER);
+	//mTouten->call(ScriptObject::UNINITIALIZE_WINDOW_MANAGER);
 }
 
 Window* WindowManager::createWindow(const String& name, const CustomParameters* paras, const String& factory )
@@ -50,7 +53,9 @@ Window* WindowManager::createWindow(const String& name, const CustomParameters* 
 		return nullptr;
 	}
 	
-	Window* win = fac->second->createWindowImpl(name, paras);
+	Window* win = fac->second->createWindowImpl(name, this);
+	win->initialize(paras);
+
 	mWindows.insert(Windows::value_type(name, win));
 	return win;
 }
