@@ -5,7 +5,7 @@
 
 namespace ST
 {
-	class Exception
+	class ShoutenExport Exception
 	{
 	public :
 		Exception(const String& content, const String& type);
