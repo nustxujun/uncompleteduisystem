@@ -21,6 +21,10 @@ namespace ST
 			left(0), right(0), top(0), bottom(0)
 		{}
 
+		Rect(const T& l, const T& t, const T& r, const T& b) :
+			left(l), right(r), top(t), bottom(b)
+		{}
+
 		Rect& move(const T& x, const T& y)
 		{
 			left += x;

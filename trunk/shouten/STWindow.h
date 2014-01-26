@@ -49,6 +49,9 @@ namespace ST
 		void setHeight(int h);
 		void setSize(int w, int h);
 
+		void dirty();
+		bool isDirty() const;
+
 		//common function
 		virtual void initialize(const CustomParameters* paras);
 		virtual void uninitialize();
@@ -71,8 +74,7 @@ namespace ST
 		Propertys mPropertys;
 
 	protected:
-		void dirty();
-		bool isDirty() const;
+
 		void refresh();
 
 
