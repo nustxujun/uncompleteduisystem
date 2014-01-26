@@ -9,6 +9,9 @@ namespace ST
 	class ShoutenExport WindowRenderer
 	{
 	public:
+		WindowRenderer()
+		{
+		}
 		virtual Geometry* createGeometry() = 0;
 		virtual void destroyGeometry(Geometry* geom) = 0;
 
