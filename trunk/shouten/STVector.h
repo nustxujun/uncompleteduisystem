@@ -3,26 +3,53 @@
 
 namespace ST
 {
-	template<class Type>
-	class ShoutenExport Vector2
+	class Vector2
 	{
 	public :
-		Type x, y;
+		float x, y;
+
+	public:
+		Vector2()
+		{}
+
+		Vector2(const float& a, const float& b) :
+			x(a), y(b)
+		{
+		}
 	};
 
-	template<class Type>
-	class ShoutenExport Vector3
+	class Vector3
 	{
 	public :
-		Type x, y, z;
+		float x, y, z;
+
+		Vector3()
+		{
+		}
+
+		Vector3(float fX, float fY, float fZ)
+			: x(fX), y(fY), z(fZ)
+		{
+		}
 	};
 
 
-	typedef Vector2<float>	Vector2F;
-	typedef Vector2<int>	Vector2I;
+	class Vector4
+	{
+	public:
+		float x, y, z,w;
 
-	typedef Vector3<float>	Vector3F;
-	typedef Vector3<int>	Vector3I;
+
+		Vector4()
+		{}
+
+		Vector4(float fX, float fY, float fZ, float fW)
+			: x(fX), y(fY), z(fZ), w(fW)
+		{
+		}
+	};
+
+
 }
 
 #endif

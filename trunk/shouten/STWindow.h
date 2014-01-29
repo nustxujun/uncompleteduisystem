@@ -4,6 +4,9 @@
 #include "STCommon.h"
 #include "STScriptObjectDefinition.h"
 #include "STRect.h"
+#include "STVector.h"
+#include "STInput.h"
+#include "STRenderObject.h"
 
 namespace ST
 {
@@ -31,6 +34,8 @@ namespace ST
 		const String& getProperty(const String& key)const;
 
 		Window* getParent();
+		RenderObject* getRenderObject();
+
 		const RectI& getRect()const;
 		RectI getAbsRect()const;
 
@@ -51,12 +56,53 @@ namespace ST
 
 		void dirty();
 		bool isDirty() const;
+		bool isMousePassThroughEnabled()const;
+
+		class WindowHitTest
+		{
+		public :
+			bool operator()(int x, int y, Window* win)
+			{
+				return win->getRenderObject()->getWorldAABB().inside(x, y);
+			}
+		};
+
+		template<class Type = WindowHitTest>
+		Window* getHitWindow(int x, int y, Type testFunc = WindowHitTest())
+		{
+			auto i = mChildren.begin();
+			auto endi = mChildren.end();
+			for (; i != endi; ++i)
+			{
+				Window* w = i->second->getHitWindow(x, y, testFunc);
+				if (w == nullptr) continue;
+				return w;
+			}
+			
+			if (isHit(x, y, testFunc)) return this;
+			return nullptr;
+		}
+
+		template<class Type = WindowHitTest>
+		bool isHit(int x, int y, Type testFunc = WindowHitTest())
+		{
+			return !isMousePassThroughEnabled() && testFunc(x, y, this);
+		}
 
 		//common function
 		virtual void initialize(const CustomParameters* paras);
 		virtual void uninitialize();
 		virtual void close();
 		virtual void draw();
+
+
+		//event
+		virtual void injectMouseMove(int posx, int posy, int deltax, int deltay);
+		virtual void injectMouseButtonDown(Mouse::MouseButton btn);
+		virtual void injectMouseButtonUp(Mouse::MouseButton btn);
+		virtual void injectMouseWheel(float delta);
+		virtual void injectKeyDown(Key::KeyType key);
+		virtual void injectKeyUp(Key::KeyType key);
 
 	private:
 		String mName;
@@ -74,13 +120,15 @@ namespace ST
 		Propertys mPropertys;
 
 	protected:
-
 		void refresh();
-
 
 	private://property
 		Window* mParent;
+		using Children = std::hash_map<String, Window*>;
+		Children mChildren;
+
 		bool mIsdirty;
+		bool mMousePassThrough;
 		RectI mRect;
 
 

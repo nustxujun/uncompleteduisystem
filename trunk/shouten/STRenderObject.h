@@ -2,6 +2,8 @@
 #define _STRenderObject_H_
 
 #include "STCommon.h"
+#include "STVector.h"
+#include "STRect.h"
 
 namespace ST
 {
@@ -15,11 +17,13 @@ namespace ST
 		WindowRenderer* getRenderer();
 
 		Geometry* createGeometry();
+		size_t getGeometryCount()const;
+		Geometry* getGeometry(size_t index);
 		void removeGeometry(size_t index);
 		void removeAllGeometry();
 
+		virtual RectI getWorldAABB();
 		virtual void notifyUpdateWindow();
-
 		virtual void render() ;
 	private:
 		WindowRenderer* mRenderer;

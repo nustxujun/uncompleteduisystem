@@ -19,6 +19,17 @@ Colour::Colour(float red, float green, float blue, float alpha ):
 r(red), g(green), b(blue), a(alpha)
 {}
 
+Colour Colour::operator * (float val)const
+{
+	Colour c;
+	c.r = val * r;
+	c.g = val * g;
+	c.b = val * b;
+	c.a = val * a;
+	return c;
+}
+
+
 
 void Colour::setFromARGB(ARGB c)
 {
@@ -40,3 +51,4 @@ ARGB Colour::getAsARGB()const
 
 	return ret;
 }
+

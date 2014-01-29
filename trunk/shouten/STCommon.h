@@ -17,6 +17,8 @@ namespace ST
 
 	class Geometry;
 
+	class Matrix3;
+
 	class RenderObject;
 	class RenderTarget;
 

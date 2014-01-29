@@ -9,7 +9,6 @@ namespace ST
 	class RenderTarget
 	{
 	public :
-		virtual void draw(const Geometry* geom) = 0;
 		virtual void activate() = 0;
 		virtual void deactivate() = 0;
 

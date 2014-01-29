@@ -1,0 +1,19 @@
+global function AddWindowFunction(winname, membername, funcname)
+{
+	win &= GetWindow(winname);
+	win[membername] = _GetGlobalFunction(funcname);
+}
+
+global function CloseWindow(winname)
+{
+	win &= GetWindow(winname);
+	win.Close();
+	RemoveWindow(winname);
+}
+
+global function InjectMouseMove(winname, x, y)
+{
+	win &= GetWindow(winname);
+	win.setPosition(x, y);
+}
+

@@ -17,13 +17,17 @@ namespace ST
 
 		void addVertex(const Vertex& vert);
 		void addVertex(const Vertex* verts, size_t count);
+		size_t getVertexCount()const;
+		const Vertex& getVertex(size_t index)const;
+
 		void setTexture(Texture::Ptr tex);
 		void clear();
-		void draw()const;
+		void draw(const Matrix4& mat)const;
+		const RectF& getAABB()const ;
 
 	private:
 		GDIRenderer* mRenderer;
-		RectI mRect;
+		RectF mRect;
 		HDC mDC;
 		
 		using Vertexs = std::vector<Vertex>;

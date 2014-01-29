@@ -1,0 +1,11 @@
+windowManager;
+
+global function GetWindow(name)
+{
+	return @windowManager.name;
+}
+
+global function RemoveWindow(name)
+{
+	@windowManager.name = null;
+}
