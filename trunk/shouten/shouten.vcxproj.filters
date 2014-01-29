@@ -185,5 +185,8 @@
     <ClCompile Include="STRenderWindowEventProcessor.cpp">
       <Filter>Render\RenderObject</Filter>
     </ClCompile>
+    <ClCompile Include="STRenderWindow.cpp">
+      <Filter>Render\RenderObject</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

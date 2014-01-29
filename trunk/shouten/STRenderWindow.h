@@ -9,8 +9,8 @@ namespace ST
 	class ShoutenExport RenderWindow : public RenderObject
 	{
 	public:
-		RenderWindow(Window* win, WindowRenderer* renderer) :RenderObject(win, renderer){}
-		~RenderWindow(){}
+		RenderWindow(Window* win, WindowRenderer* renderer);
+		~RenderWindow();
 
 
 	};

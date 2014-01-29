@@ -65,8 +65,5 @@
     <ClCompile Include="STGDIRenderWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\shouten\STRenderWindow.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
