@@ -82,141 +82,57 @@ void* alloc(void* optr, size_t nsize)
 }
 
 #include "../ShoutenGDIRenderer/STGDIRenderer.h"
+#include "../ShoutenGDIRenderer/STGDIRenderWindow.h"
+
 #pragma comment(lib, "Msimg32.lib") 
-
-ST::Window* root = 0;
-
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	if (root)
-	{
-
-		switch (msg)
-		{
-		//case WM_LBUTTONDOWN:
-		//{
-		//					   ST::Window* win = root->getHitWindow(LOWORD(lParam), HIWORD(lParam));
-		//					   if (win) win->injectMouseButtonDown(ST::Mouse::LeftButton);
-		//}
-		//	//SendMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
-		//	break;
-		//case WM_LBUTTONUP:
-		//{
-		//					 ST::Window* win = root->getHitWindow(LOWORD(lParam), HIWORD(lParam));
-		//					 if (win) win->injectMouseButtonUp(ST::Mouse::LeftButton);
-		//}
-		//	//SendMessage(hWnd, WM_NCLBUTTONUP, HTCAPTION, lParam);
-		//	break;
-		case WM_MOUSEMOVE:
-		{
-							 root->injectMouseMove(LOWORD(lParam), HIWORD(lParam), 0, 0);
-							// ST::Window* win = root->getHitWindow(LOWORD(lParam), HIWORD(lParam));
-							// if (win) win->injectMouseMove(LOWORD(lParam), HIWORD(lParam), 0, 0);
-		}
-			break;
-		}
-	}
-
-	return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	HMODULE instance = ::GetModuleHandle(NULL);
-
-	WNDCLASSEX wc;
-	memset(&wc,0, sizeof(wc));
-	wc.cbSize = sizeof(wc);
-	wc.style = 0; 
-	wc.lpfnWndProc = WndProc;
-	wc.cbClsExtra = 0; 
-	wc.cbWndExtra = 0; 
-	wc.hInstance = instance;
-	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW); 
-	wc.hbrBackground = (HBRUSH)(GetStockObject(WHITE_BRUSH));
-	wc.lpszMenuName = NULL; 
-	wc.lpszClassName = L"Demo"; 
-	::RegisterClassEx(&wc);
-
-
-	HWND wnd = ::CreateWindowEx(WS_EX_LAYERED /*^ WS_EX_TOOLWINDOW*/, L"Demo", L"Demo", 0,
-		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-		NULL, NULL, instance, NULL);
-
-
-
-	::ShowWindow(wnd, SW_SHOW);
-	::UpdateWindow(wnd);
+	const int winWidth = 800;
+	const int winHeight = 600;
 
 	using namespace ST;
 	{
 		WindowSystem ws;
+		GDIRenderer renderer;
+		GDIRenderWindowFactory rwFactory;
+		BasicImageFactory biFactory;
+		RenderWindowEventProcessor rwep;
+
+		ws.addRenderer(L"gdirenderer", &renderer);
+		ws.addRenderObjectFactory(GDIRenderWindowFactory::NAME, &rwFactory);
+		ws.addRenderObjectFactory(BasicImageFactory::NAME, &biFactory);
+
 
 		ws.loadScript(L"WindowManager.tt");
 		ws.loadScript(L"Window.tt");
 
-		GDIRenderer renderer;
-
-		RECT winrect;
-		::GetWindowRect(wnd, &winrect);
-		size_t winwidth = winrect.right - winrect.left;
-		size_t winheight = winrect.bottom - winrect.top;
-		renderer.initialise(winwidth, winheight );
-		ws.addRenderer(L"gdirenderer", &renderer);
-
+		renderer.initialise(winWidth, winHeight);
 		renderer.createTexture(L"back",L"pic.jpg");
 
 		WindowManager wm;
 		CustomParameters paras;
 		paras[L"renderer"] = L"gdirenderer";
+		paras[L"renderobjectfactory"] = GDIRenderWindowFactory::NAME;
 		paras[WindowProperty::BACKGROUND_COLOUR] = L"255,255,255";
-		Window* w = wm.createWindow(L"a", &paras);
-		w->setPosition(100, 100);
-		w->setSize(100, 50);
-		w->setProperty(WindowProperty::BACKGROUND_COLOUR, L"32,255,0,0");
+		Window* w = wm.createWindow(L"root", &paras);
+		//w->setPosition(100, 100);
+		w->setSize(winWidth, winHeight);
+		w->setProperty(WindowProperty::BACKGROUND_COLOUR, L"0,0,0,0");
 		//w->setProperty(WindowProperty::BACKGROUND_TEXTURE, L"back");
 		ws.addRenderRoot(w);
 
-		root = w;
-		MSG msg;
+		paras[L"renderobjectfactory"] = BasicImageFactory::NAME;
+		paras[WindowProperty::BACKGROUND_COLOUR] = L"0x80ff0000";
+		w = w->createChild(L"child", &paras);
+		w->setSize(100, 50);
+		w->setPosition(0, 0);
 		while (true)
 		{
-			if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-			{
-				::TranslateMessage(&msg);
-				::DispatchMessage(&msg);
-			}
-			else
-			{
-
-				GDIRenderTarget* target = (GDIRenderTarget*)renderer.getDefaultRenderTarget();
-				target->fill(0x80ffffff);
-				ws.render();
-
-				HDC dc = GetDC(wnd);
-				//BOOL ret = ::BitBlt(dc, 0, 0, w->getWidth(), w->getHeight(), target->getDC(), 0, 0, SRCCOPY);
-
-				::GetWindowRect(wnd, &winrect);
-				size_t winwidth = winrect.right - winrect.left;
-				size_t winheight = winrect.bottom - winrect.top;
-				POINT dstpos = { winrect.left, winrect.top };
-				POINT srcpos = { 0, 0 };
-				SIZE size = { winwidth, winheight };
-				BLENDFUNCTION bf = { 0 };
-				bf.AlphaFormat = AC_SRC_ALPHA;
-				bf.BlendFlags = 0;
-				bf.BlendOp = AC_SRC_OVER;
-				bf.SourceConstantAlpha = 0xff;
-
-				BOOL ret = ::UpdateLayeredWindow(wnd, dc, &dstpos, &size, target->getDC(), &srcpos, 0, &bf, ULW_ALPHA);
-
-				
-
-				ReleaseDC(wnd, dc);
+			RenderWindowEventProcessor::pumpMessage();
+		
+			ws.render();
 			
-			}
 		}
 
 

@@ -90,15 +90,18 @@
     <ClInclude Include="STGDIRenderer.h" />
     <ClInclude Include="STGDIRendererCommon.h" />
     <ClInclude Include="STGDIRenderTarget.h" />
+    <ClInclude Include="STGDIRenderWindow.h" />
     <ClInclude Include="STGDITextrue.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\shouten\STRenderWindow.cpp" />
     <ClCompile Include="STGDIGeometry.cpp" />
     <ClCompile Include="ShoutenGDIRenderer.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="STGDIRenderer.cpp" />
     <ClCompile Include="STGDIRenderTarget.cpp" />
+    <ClCompile Include="STGDIRenderWindow.cpp" />
     <ClCompile Include="STGDITexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

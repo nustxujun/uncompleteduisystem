@@ -24,6 +24,10 @@ namespace ST
 		void addRenderRoot(Window* root);
 		void removeRenderRoot(Window* root);
 
+		void addRenderObjectFactory(const String& name, RenderObjectFactory* fac);
+		RenderObjectFactory* getRenderObjectFactory(const String& name);
+		RenderObjectFactory* removeRenderObjectFactory(const String& name);
+
 		bool loadScript(const String& filename);
 
 		void render();
@@ -35,6 +39,9 @@ namespace ST
 
 		using RenderRoots = std::vector<Window*>;
 		RenderRoots mRoots;
+
+		using RenderObjectFactorys = std::map<String, RenderObjectFactory*>;
+		RenderObjectFactorys mROFactorys;
 
 		TT::Touten* mTouten;
 		TT::Bind* mBind;

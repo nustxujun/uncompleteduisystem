@@ -89,7 +89,6 @@
     <ClInclude Include="STColour.h" />
     <ClInclude Include="STCommon.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="STDimension.h" />
     <ClInclude Include="STException.h" />
     <ClInclude Include="STGeometry.h" />
     <ClInclude Include="STInput.h" />
@@ -98,8 +97,11 @@
     <ClInclude Include="STQuaternion.h" />
     <ClInclude Include="STRect.h" />
     <ClInclude Include="STRenderObject.h" />
+    <ClInclude Include="STRenderObjectFactory.h" />
     <ClInclude Include="STRenderState.h" />
     <ClInclude Include="STRenderTarget.h" />
+    <ClInclude Include="STRenderWindow.h" />
+    <ClInclude Include="STRenderWindowEventProcessor.h" />
     <ClInclude Include="STScriptObjectDefinition.h" />
     <ClInclude Include="STScriptSystem.h" />
     <ClInclude Include="STSingleton.h" />
@@ -126,6 +128,8 @@
     <ClCompile Include="STMatrix.cpp" />
     <ClCompile Include="STQuaternion.cpp" />
     <ClCompile Include="STRenderObject.cpp" />
+    <ClCompile Include="STRenderObjectFactory.cpp" />
+    <ClCompile Include="STRenderWindowEventProcessor.cpp" />
     <ClCompile Include="STScriptObjectDefinition.cpp" />
     <ClCompile Include="STStringUtil.cpp" />
     <ClCompile Include="STWindow.cpp" />

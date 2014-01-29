@@ -120,8 +120,14 @@
     <ClInclude Include="STQuaternion.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="STDimension.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="STRenderWindow.h">
+      <Filter>Render\RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="STRenderObjectFactory.h">
+      <Filter>Render\RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="STRenderWindowEventProcessor.h">
+      <Filter>Render\RenderObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +178,12 @@
     </ClCompile>
     <ClCompile Include="STQuaternion.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="STRenderObjectFactory.cpp">
+      <Filter>Render\RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="STRenderWindowEventProcessor.cpp">
+      <Filter>Render\RenderObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -7,5 +7,9 @@
 #include "STWindowManager.h"
 
 #include "STWindowSystem.h"
+#include "STRenderWindowEventProcessor.h"
+
+#include "STRenderObject.h"
+#include "STBasicImage.h"
 
 #endif

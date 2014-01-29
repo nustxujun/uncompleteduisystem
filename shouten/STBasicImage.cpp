@@ -85,3 +85,16 @@ BasicImage::~BasicImage()
 {
 
 }
+
+
+RenderObject* BasicImageFactory::createImpl(Window* win, WindowRenderer* renderer)
+{
+	return new BasicImage(win, renderer);
+}
+
+void BasicImageFactory::destroyImpl(RenderObject* ro)
+{
+	delete (BasicImage*)ro;
+}
+
+const Char* BasicImageFactory::NAME = L"BasicImageFactory";

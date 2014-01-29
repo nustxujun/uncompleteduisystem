@@ -15,6 +15,7 @@ namespace ST
 		
 		Window* getWindow();
 		WindowRenderer* getRenderer();
+		RenderTarget* getRenderTarget();
 
 		Geometry* createGeometry();
 		size_t getGeometryCount()const;
