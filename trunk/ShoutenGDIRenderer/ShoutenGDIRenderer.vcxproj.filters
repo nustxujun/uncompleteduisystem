@@ -39,6 +39,9 @@
     <ClInclude Include="STGDIRenderTarget.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="STGDIRenderWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -57,6 +60,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="STGDITexture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="STGDIRenderWindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shouten\STRenderWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

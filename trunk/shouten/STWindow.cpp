@@ -7,6 +7,8 @@
 #include "STWindowHelper.h"
 #include "STWindowSystem.h"
 #include "STBasicImage.h"
+#include "STRenderObjectFactory.h"
+#include "STException.h"
 
 using namespace ST;
 
@@ -55,30 +57,65 @@ const WindowFactory* Window::getFactory()const
 	return mFactory;
 }
 
+Window* Window::createChild(const String& name, const CustomParameters* paras, const String& factory)
+{
+	Window* win = getChild(name);
+	if (win) 
+	{ 
+		ST_EXCEPT(L"same child name", L"Window::createChild"); 
+		return win; 
+	}
+
+	String facName = factory;
+	if (factory == L"") facName = mFactory->getName();
+	 win = mManager->createWindow(name, paras, facName);
+	mChildren.insert(Children::value_type(name, win));
+	win->mParent = this;
+	return win;
+}
+
+Window* Window::getChild(const String& name)
+{
+	auto ret = mChildren.find(name);
+	if (ret == mChildren.end())
+		return nullptr;
+	return ret->second;
+}
+void Window::destroyChild(const String& name)
+{
+	mChildren.erase(name);
+	mManager->destroyWindow(name);
+}
+
 void Window::parseParameter(const CustomParameters& paras)
 {
 	auto end = paras.end();
+	for (auto i = paras.begin(); i != end; ++i)
+	{
+		mPropertys[i->first] = i->second;
+	}
+
+	WindowSystem& ws = WindowSystem::getSingleton();
+
+	//WindowRenderer
 	WindowRenderer* renderer = nullptr;
 	{
 		auto ret = paras.find(WindowProperty::RENDERER);
 		if (ret != end)
 		{	
-			renderer = WindowSystem::getSingleton().getRenderer(ret->second);
+			renderer = ws.getRenderer(ret->second);
 		}
 	}
 
+	//RenderObject
 	{
-		auto ret = paras.find(WindowProperty::RENDER_OBJECT);
+		auto ret = paras.find(WindowProperty::RENDER_OBJECT_FACTORY);
+		String facname = RenderObjectFactory::NAME;
 		if (ret != end)
-		{
-		}
-		else if (paras.find(WindowProperty::BACKGROUND_TEXTURE) != end ||
-			paras.find(WindowProperty::BACKGROUND_COLOUR) != end)
-		{
-			mRenderObject = new BasicImage(this, renderer);
-		}
-		else
-			mRenderObject = new RenderObject(this, renderer);
+			facname = ret->second;
+	
+		RenderObjectFactory* fac = ws.getRenderObjectFactory(facname);
+		mRenderObject = fac->createImpl(this, renderer);
 	}
 
 
@@ -120,8 +157,8 @@ void Window::draw()
 
 	mRenderObject->render();
 
-	std::for_each(mChilds.begin(), mChilds.end(), 
-		[](Childs::value_type& c)
+	std::for_each(mChildren.begin(), mChildren.end(),
+		[](Children::value_type& c)
 		{
 			c.second->draw();
 		});

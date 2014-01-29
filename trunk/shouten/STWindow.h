@@ -20,7 +20,7 @@ namespace ST
 		const String& getName()const;
 		const WindowFactory* getFactory()const;
 
-		Window* createChild(const String& name);
+		Window* createChild(const String& name, const CustomParameters* paras = nullptr, const String& factory = L"");
 		Window* getChild(const String& name);
 		void destroyChild(const String& name);
 
@@ -110,19 +110,12 @@ namespace ST
 		WindowManager* mManager;
 		RenderObject* mRenderObject;
 
-		using Childs = std::hash_map<String, Window*>;
-		Childs mChilds;
-
 		using FuncNames = std::vector<String>;
 		FuncNames mFuncNames;
 
 		using Propertys = std::hash_map<String, String>;
 		Propertys mPropertys;
 
-	protected:
-		void refresh();
-
-	private://property
 		Window* mParent;
 		using Children = std::hash_map<String, Window*>;
 		Children mChildren;

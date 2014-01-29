@@ -12,6 +12,8 @@ namespace ST
 	{
 	public :
 		static int toInt(const String& str);
+		static unsigned int toUInt(const String& str, bool hex = true);
+
 		static Colour toColour(const String& str);
 
 		template<class T>

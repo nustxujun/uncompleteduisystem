@@ -4,6 +4,8 @@
 #include "STCommon.h"
 #include "STRenderObject.h"
 
+#include "STRenderObjectFactory.h"
+
 namespace ST
 {
 	class ShoutenExport BasicImage : public RenderObject
@@ -16,6 +18,16 @@ namespace ST
 
 	private:
 		Geometry* mGeom;
+	};
+
+	class ShoutenExport BasicImageFactory : public RenderObjectFactory
+	{
+	public:
+		RenderObject* createImpl(Window* win, WindowRenderer* renderer);
+		void destroyImpl(RenderObject* ro);
+
+		static const Char* NAME;
+
 	};
 }
 

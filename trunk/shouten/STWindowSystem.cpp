@@ -47,6 +47,31 @@ void WindowSystem::removeRenderRoot(Window* root)
 	if (ret != mRoots.end()) mRoots.erase(ret);
 }
 
+void WindowSystem::addRenderObjectFactory(const String& name, RenderObjectFactory* fac)
+{
+	auto ret = mROFactorys.insert(RenderObjectFactorys::value_type(name, fac));
+	if (!ret.second) { ST_EXCEPT(L"Specify RenderObjectFactory is existed.", L"WindowSystem::addRenderObjectFactory")}
+
+}
+
+RenderObjectFactory* WindowSystem::getRenderObjectFactory(const String& name)
+{
+	auto ret = mROFactorys.find(name);
+	if (ret != mROFactorys.end()) return ret->second;
+
+	ST_EXCEPT(L"Specify RenderObjectFactory is not existed.", L"WindowSystem::getRenderObjectFactory");
+}
+
+RenderObjectFactory* WindowSystem::removeRenderObjectFactory(const String& name)
+{
+	auto ret = mROFactorys.find(name);
+	if (ret == mROFactorys.end()) return nullptr;
+
+	RenderObjectFactory* fac = ret->second;
+	mROFactorys.erase(ret);
+	return fac;
+}
+
 void WindowSystem::render()
 {
 	auto endi = mRenderers.end();

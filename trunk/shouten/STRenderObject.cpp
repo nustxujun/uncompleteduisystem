@@ -28,6 +28,12 @@ WindowRenderer* RenderObject::getRenderer()
 	return mRenderer;
 }
 
+RenderTarget* RenderObject::getRenderTarget()
+{
+	return mTarget;
+}
+
+
 Geometry* RenderObject::createGeometry()
 {
 	Geometry* geom = mRenderer->createGeometry();

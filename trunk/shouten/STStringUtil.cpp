@@ -12,6 +12,15 @@ int StringUtil::toInt(const String& str)
 	return val;
 }
 
+unsigned int StringUtil::toUInt(const String& str, bool hex )
+{
+	std::wstringstream ss;
+	unsigned int val;
+	if (hex) ss << std::hex;
+	ss << str;
+	ss >> val;
+	return val;
+}
 
 Colour StringUtil::toColour(const String& str)
 {
@@ -21,7 +30,7 @@ Colour StringUtil::toColour(const String& str)
 
 	if ((*(int*)str.c_str()) == (*(int*)hexhead))
 	{
-		ret.setFromARGB(toInt(str));
+		ret.setFromARGB(toUInt(str));
 		return ret;
 	}
 	else

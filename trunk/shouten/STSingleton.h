@@ -23,7 +23,14 @@ namespace ST
 
 		static T& getSingleton()
 		{
+			assert(instance());
 			return *instance();
+		}
+
+		static T* getSingletonPtr()
+		{
+			assert(instance());
+			return instance();
 		}
 
 	private:

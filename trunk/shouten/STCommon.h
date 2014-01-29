@@ -20,7 +20,9 @@ namespace ST
 	class Matrix3;
 
 	class RenderObject;
+	class RenderObjectFactory;
 	class RenderTarget;
+	class RenderWindow;
 
 	class ScriptSystem;
 

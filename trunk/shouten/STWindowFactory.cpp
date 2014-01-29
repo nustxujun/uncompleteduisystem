@@ -14,3 +14,8 @@ void DefaultWinFactory::destroyWindowImpl(Window* window)const
 {
 	delete window;
 }
+
+const Char* DefaultWinFactory::getName()const
+{
+	return NAME;
+}

@@ -13,7 +13,7 @@ namespace ST
 		static const Char* BACKGROUND_COLOUR;
 
 		static const Char* RENDERER;
-		static const Char* RENDER_OBJECT;
+		static const Char* RENDER_OBJECT_FACTORY;
 	};
 }
 
