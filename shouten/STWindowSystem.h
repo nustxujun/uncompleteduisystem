@@ -24,7 +24,7 @@ namespace ST
 		void addRenderRoot(Window* root);
 		void removeRenderRoot(Window* root);
 
-		void loadScript(const String& filename);
+		bool loadScript(const String& filename);
 
 		void render();
 

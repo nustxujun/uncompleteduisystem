@@ -9,8 +9,8 @@ namespace ST
 	class ShoutenExport Vertex
 	{
 	public:
-		Vector3F position;
-		Vector2F texcoords;
+		Vector3 position;
+		Vector2 texcoords;
 		Colour colour;
 	};
 }

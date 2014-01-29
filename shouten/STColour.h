@@ -17,6 +17,8 @@ namespace ST
 		Colour(ARGB c);
 		Colour(float red, float green, float blue, float alpha = 1.0f);
 
+		Colour operator * (float val)const;
+
 
 		void setFromARGB(ARGB c);
 		ARGB getAsARGB()const;

@@ -26,9 +26,9 @@ WindowManager::~WindowManager()
 
 void WindowManager::initializeScript()
 {
-	WindowSystem& sys = WindowSystem::getSingleton();
-	sys.loadScript(L"WindowManager.tt");
-	sys.loadScript(L"Window.tt");
+	//WindowSystem& sys = WindowSystem::getSingleton();
+	//sys.loadScript(L"WindowManager.tt");
+	//sys.loadScript(L"Window.tt");
 	
 	//mTouten->call(ScriptObject::INITIALIZE_WINDOW_MANAGER);
 }

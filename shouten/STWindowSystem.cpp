@@ -68,7 +68,7 @@ TT::Bind* WindowSystem::getScriptBind()
 	return mBind;		
 }
 
-void WindowSystem::loadScript(const String& filename)
+bool WindowSystem::loadScript(const String& filename)
 {
-	mTouten->loadFile(filename);
+	return mTouten->loadFile(filename);
 }

@@ -1,4 +1,5 @@
 #include "STRenderObject.h"
+#include "STWindow.h"
 #include "STWindowRenderer.h"
 #include "STException.h"
 #include "STGeometry.h"
@@ -34,6 +35,16 @@ Geometry* RenderObject::createGeometry()
 	return geom;
 }
 
+size_t RenderObject::getGeometryCount()const
+{
+	return mGeometryVec.size();
+}
+
+Geometry* RenderObject::getGeometry(size_t index)
+{
+	return mGeometryVec[index];
+}
+
 void RenderObject::removeGeometry(size_t index)
 {
 	if (index >= mGeometryVec.size())
@@ -56,12 +67,34 @@ void RenderObject::removeAllGeometry()
 
 void RenderObject::render()
 {
+	Matrix4 mat;
+	Vector3 pos((float)mWindow->getAbsX(), (float)mWindow->getAbsY(), 0);
+	Quaternion orien = Quaternion::IDENTITY;
+	Vector3 scale(1, 1, 1);
+	mat.makeTransform(pos, scale, orien);
+
+	mTarget->activate();
+
 	auto endi = mGeometryVec.end();
 	for (auto i = mGeometryVec.begin(); i != endi; ++i)
 	{
-		mTarget->draw(*i);
+		(*i)->draw(mat);
 	}
+
+	mTarget->deactivate();
 }
+
+RectI RenderObject::getWorldAABB()
+{
+	RectF aabb;
+	std::for_each(mGeometryVec.begin(), mGeometryVec.end(), [&aabb](const Geometry* geom)
+	{
+		aabb.merge(geom->getAABB());
+	});
+
+	return aabb;
+}
+
 
 void RenderObject::notifyUpdateWindow()
 {

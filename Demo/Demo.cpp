@@ -84,17 +84,38 @@ void* alloc(void* optr, size_t nsize)
 #include "../ShoutenGDIRenderer/STGDIRenderer.h"
 #pragma comment(lib, "Msimg32.lib") 
 
+ST::Window* root = 0;
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	//switch (msg)
-	//{
-	//case WM_LBUTTONDOWN:
-	//	SendMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
-	//	break;
-	//case WM_LBUTTONUP:
-	//	SendMessage(hWnd, WM_NCLBUTTONUP, HTCAPTION, lParam);
-	//	break;
-	//}
+	if (root)
+	{
+
+		switch (msg)
+		{
+		//case WM_LBUTTONDOWN:
+		//{
+		//					   ST::Window* win = root->getHitWindow(LOWORD(lParam), HIWORD(lParam));
+		//					   if (win) win->injectMouseButtonDown(ST::Mouse::LeftButton);
+		//}
+		//	//SendMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
+		//	break;
+		//case WM_LBUTTONUP:
+		//{
+		//					 ST::Window* win = root->getHitWindow(LOWORD(lParam), HIWORD(lParam));
+		//					 if (win) win->injectMouseButtonUp(ST::Mouse::LeftButton);
+		//}
+		//	//SendMessage(hWnd, WM_NCLBUTTONUP, HTCAPTION, lParam);
+		//	break;
+		case WM_MOUSEMOVE:
+		{
+							 root->injectMouseMove(LOWORD(lParam), HIWORD(lParam), 0, 0);
+							// ST::Window* win = root->getHitWindow(LOWORD(lParam), HIWORD(lParam));
+							// if (win) win->injectMouseMove(LOWORD(lParam), HIWORD(lParam), 0, 0);
+		}
+			break;
+		}
+	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
@@ -120,9 +141,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	::RegisterClassEx(&wc);
 
 
-	HWND wnd = ::CreateWindowEx(WS_EX_LAYERED, L"Demo", L"Demo", 0,
-		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 
+	HWND wnd = ::CreateWindowEx(WS_EX_LAYERED /*^ WS_EX_TOOLWINDOW*/, L"Demo", L"Demo", 0,
+		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 		NULL, NULL, instance, NULL);
+
 
 
 	::ShowWindow(wnd, SW_SHOW);
@@ -131,6 +153,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	using namespace ST;
 	{
 		WindowSystem ws;
+
+		ws.loadScript(L"WindowManager.tt");
+		ws.loadScript(L"Window.tt");
 
 		GDIRenderer renderer;
 
@@ -148,12 +173,13 @@ int _tmain(int argc, _TCHAR* argv[])
 		paras[L"renderer"] = L"gdirenderer";
 		paras[WindowProperty::BACKGROUND_COLOUR] = L"255,255,255";
 		Window* w = wm.createWindow(L"a", &paras);
-		w->setSize(500, 500);
-		w->setProperty(WindowProperty::BACKGROUND_COLOUR, L"128,255,255,255");
+		w->setPosition(100, 100);
+		w->setSize(100, 50);
+		w->setProperty(WindowProperty::BACKGROUND_COLOUR, L"32,255,0,0");
 		//w->setProperty(WindowProperty::BACKGROUND_TEXTURE, L"back");
 		ws.addRenderRoot(w);
 
-
+		root = w;
 		MSG msg;
 		while (true)
 		{
@@ -164,9 +190,9 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 			else
 			{
+
 				GDIRenderTarget* target = (GDIRenderTarget*)renderer.getDefaultRenderTarget();
-				target->fill(0x00000000);
-				w->dirty();
+				target->fill(0x80ffffff);
 				ws.render();
 
 				HDC dc = GetDC(wnd);

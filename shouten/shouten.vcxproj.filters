@@ -111,6 +111,18 @@
     <ClInclude Include="STRenderState.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="STInput.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STMatrix.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="STQuaternion.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="STDimension.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -154,6 +166,12 @@
     </ClCompile>
     <ClCompile Include="STGeometry.cpp">
       <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="STMatrix.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="STQuaternion.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

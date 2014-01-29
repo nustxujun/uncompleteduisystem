@@ -12,7 +12,6 @@ namespace ST
 		GDIRenderTarget(GDIRenderer* renderer, int width, int height);
 		~GDIRenderTarget();
 
-		void draw(const Geometry* geom) ;
 		void activate() ;
 		void deactivate() ;
 
@@ -27,6 +26,7 @@ namespace ST
 		HDC mDC;
 		HBITMAP mBitmap;
 		GDIRenderer* mRenderer;
+		void* mBuffer;
 		size_t mHeight;
 		size_t mWidth;
 	};

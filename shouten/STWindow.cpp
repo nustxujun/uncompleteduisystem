@@ -11,7 +11,7 @@
 using namespace ST;
 
 Window::Window(const String& name, const WindowFactory* f, WindowManager* wm) :
-	mName(name), mFactory(f), mManager(wm)
+mName(name), mFactory(f), mManager(wm), mIsdirty(true), mMousePassThrough(false)
 {
 	mPropertys[WindowProperty::PROPERTY_NULL] = WindowProperty::PROPERTY_NULL;
 }
@@ -34,6 +34,9 @@ void Window::initializeScript()
 	WindowHelper helper;
 	helper.registerFunction(
 		*WindowSystem::getSingleton().getScriptBind(), L"close", this, &Window::close);
+
+	helper.registerFunction(
+		*WindowSystem::getSingleton().getScriptBind(), L"setPosition", this, &Window::setPosition);
 
 }
 
@@ -113,9 +116,9 @@ void Window::draw()
 	{
 		mRenderObject->notifyUpdateWindow();
 		mIsdirty = false;
-		mRenderObject->render();
-
 	}
+
+	mRenderObject->render();
 
 	std::for_each(mChilds.begin(), mChilds.end(), 
 		[](Childs::value_type& c)
@@ -148,6 +151,12 @@ Window* Window::getParent()
 {
 	return mParent;
 }
+
+RenderObject* Window::getRenderObject()
+{
+	return mRenderObject;
+}
+
 
 const RectI& Window::getRect()const
 {
@@ -217,19 +226,16 @@ void Window::setRect(const RectI& r)
 void Window::setX(int x)
 {
 	mRect.moveTo(x, mRect.top);
-	dirty();
 }
 
 void Window::setY(int y)
 {
 	mRect.moveTo(mRect.left, y);
-	dirty();
 }
 
 void Window::setPosition(int x, int y)
 {
 	mRect.moveTo(x, y);
-	dirty();
 }
 
 void Window::setWidth(int w)
@@ -262,4 +268,46 @@ void Window::dirty()
 bool Window::isDirty() const
 {
 	return mIsdirty;
+}
+
+bool Window::isMousePassThroughEnabled()const
+{
+	return mMousePassThrough;
+}
+
+//event
+void Window::injectMouseMove(int posx, int posy, int deltax, int deltay)
+{
+	WindowSystem::getSingleton().getScriptBind()->
+		call<void>(ScriptObject::INJECT_MOUSE_MOVE, mName.c_str(), posx, posy, deltax, deltay);
+}
+
+void Window::injectMouseButtonDown(Mouse::MouseButton btn)
+{
+	WindowSystem::getSingleton().getScriptBind()->
+		call<void>(ScriptObject::INJECT_MOUSE_BUTTON_DOWN, mName.c_str(), btn);
+}
+
+void Window::injectMouseButtonUp(Mouse::MouseButton btn)
+{
+	WindowSystem::getSingleton().getScriptBind()->
+		call<void>(ScriptObject::INJECT_MOUSE_BUTTON_UP, mName.c_str(), btn);
+}
+
+void Window::injectMouseWheel(float delta)
+{
+	WindowSystem::getSingleton().getScriptBind()->
+		call<void>(ScriptObject::INJECT_MOUSE_WHEEL, mName.c_str(), delta);
+}
+
+void Window::injectKeyDown(Key::KeyType key)
+{
+	WindowSystem::getSingleton().getScriptBind()->
+		call<void>(ScriptObject::INJECT_KEY_DOWN, mName.c_str(), key);
+}
+
+void Window::injectKeyUp(Key::KeyType key)
+{
+	WindowSystem::getSingleton().getScriptBind()->
+		call<void>(ScriptObject::INJECT_KEY_UP, mName.c_str(), key);
 }
