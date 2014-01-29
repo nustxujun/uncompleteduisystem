@@ -65,10 +65,10 @@ Window* Window::createChild(const String& name, const CustomParameters* paras, c
 		ST_EXCEPT(L"same child name", L"Window::createChild"); 
 		return win; 
 	}
-
-	String facName = factory;
-	if (factory == L"") facName = mFactory->getName();
-	 win = mManager->createWindow(name, paras, facName);
+	if (factory != L"")
+		win = mManager->createWindow(name, paras, factory);
+	else
+		win = mManager->createWindow(name, paras);
 	mChildren.insert(Children::value_type(name, win));
 	win->mParent = this;
 	return win;
