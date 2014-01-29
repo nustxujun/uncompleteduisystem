@@ -10,7 +10,6 @@ namespace ST
 	public:
 		virtual Window* createWindowImpl(const String& name, WindowManager* wm)const = 0;
 		virtual void destroyWindowImpl(Window* window)const = 0;
-		virtual const Char* getName()const = 0;
 	};
 
 	class ShoutenExport DefaultWinFactory : public WindowFactory
@@ -18,7 +17,6 @@ namespace ST
 	public:
 		Window* createWindowImpl(const String& name, WindowManager* wm)const;
 		void destroyWindowImpl(Window* window)const;
-		const Char* getName()const ;
 
 
 		static const Char* NAME;
