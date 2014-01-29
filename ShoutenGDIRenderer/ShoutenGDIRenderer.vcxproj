@@ -95,7 +95,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\shouten\STRenderWindow.cpp" />
     <ClCompile Include="STGDIGeometry.cpp" />
     <ClCompile Include="ShoutenGDIRenderer.cpp" />
     <ClCompile Include="stdafx.cpp" />

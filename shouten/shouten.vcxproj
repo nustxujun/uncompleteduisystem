@@ -129,6 +129,7 @@
     <ClCompile Include="STQuaternion.cpp" />
     <ClCompile Include="STRenderObject.cpp" />
     <ClCompile Include="STRenderObjectFactory.cpp" />
+    <ClCompile Include="STRenderWindow.cpp" />
     <ClCompile Include="STRenderWindowEventProcessor.cpp" />
     <ClCompile Include="STScriptObjectDefinition.cpp" />
     <ClCompile Include="STStringUtil.cpp" />
