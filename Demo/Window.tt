@@ -1,7 +1,7 @@
 global function AddWindowFunction(winname, membername, funcname)
 {
 	win &= GetWindow(winname);
-	win[membername] = _GetGlobalFunction(funcname);
+	win[membername] = __GetGlobalFunction(funcname);
 }
 
 global function CloseWindow(winname)
@@ -11,9 +11,26 @@ global function CloseWindow(winname)
 	RemoveWindow(winname);
 }
 
-global function InjectMouseMove(winname, x, y)
+global function OnEvent(winname, method,...)
 {
 	win &= GetWindow(winname);
-	win.setPosition(x, y);
+	win[method](...);
+}
+
+global function InjectMouseMove(winname, x, y, dx, dy)
+{
+	OnEvent(winname, "OnMouseMove", x, y, dx, dy);
+}
+
+function OnMouseMove(x,y,dx,dy)
+{
+	$setPosition($getX() + dx, $getY() + dy);
+}
+
+global function InitializeWindow(name)
+{
+	win &= GetWindow(name);
+
+	win.OnMouseMove = OnMouseMove;
 }
 

@@ -13,7 +13,7 @@
 using namespace ST;
 
 Window::Window(const String& name, const WindowFactory* f, WindowManager* wm) :
-mName(name), mFactory(f), mManager(wm), mIsdirty(true), mMousePassThrough(false)
+mName(name), mFactory(f), mManager(wm), mDirty(DT_ALL), mMousePassThrough(false)
 {
 	mPropertys[WindowProperty::PROPERTY_NULL] = WindowProperty::PROPERTY_NULL;
 }
@@ -34,12 +34,20 @@ void Window::unregisterFunction(const String& name)
 void Window::initializeScript()
 {
 	WindowHelper helper;
+	TT::Bind& bind = *WindowSystem::getSingleton().getScriptBind();
 	helper.registerFunction(
-		*WindowSystem::getSingleton().getScriptBind(), L"close", this, &Window::close);
+		bind, L"close", this, &Window::close);
 
 	helper.registerFunction(
-		*WindowSystem::getSingleton().getScriptBind(), L"setPosition", this, &Window::setPosition);
+		bind, L"setPosition", this, &Window::setPosition);
 
+	helper.registerFunction(
+		bind, L"getX", this, &Window::getX);
+
+	helper.registerFunction(
+		bind, L"getY", this, &Window::getY);
+
+	bind.call<void>(L"InitializeWindow", mName.c_str());
 }
 
 void Window::uninitializeScript()
@@ -152,7 +160,7 @@ void Window::draw()
 	if (isDirty())
 	{
 		mRenderObject->notifyUpdateWindow();
-		mIsdirty = false;
+		mDirty = DT_CLEAR;
 	}
 
 	mRenderObject->render();
@@ -172,7 +180,7 @@ const String& Window::getName()const
 void Window::setProperty(const String& prop, const String& val)
 {
 	mPropertys[prop] = val;
-	dirty();
+	dirty(DT_PROPERTY);
 }
 
 const String& Window::getProperty(const String& key)const
@@ -257,54 +265,57 @@ int Window::getHeight() const
 void Window::setRect(const RectI& r)
 {
 	mRect = r;
-	dirty();
+	dirty(DT_SIZE | DT_POSITION);
 }
 
 void Window::setX(int x)
 {
 	mRect.moveTo(x, mRect.top);
+	dirty(DT_POSITION);
 }
 
 void Window::setY(int y)
 {
 	mRect.moveTo(mRect.left, y);
+	dirty(DT_POSITION);
 }
 
 void Window::setPosition(int x, int y)
 {
 	mRect.moveTo(x, y);
+	dirty(DT_POSITION);
 }
 
 void Window::setWidth(int w)
 {
 	mRect.setWidth(w);
-	dirty();
+	dirty(DT_SIZE);
 }
 
 void Window::setHeight(int h)
 {
 	mRect.setHeight(h);
-	dirty();
+	dirty(DT_SIZE);
 }
 
 void Window::setSize(int w, int h)
 {
 	mRect.setWidth(w);
 	mRect.setHeight(h);
-	dirty();
+	dirty(DT_SIZE);
 }
 
 
-void Window::dirty()
+void Window::dirty(unsigned int type)
 {
-	mIsdirty = true;
-	if (mParent)
-		mParent->dirty();
+	mDirty |= type;
+	//if (mParent)
+	//	mParent->dirty(type);
 }
 
-bool Window::isDirty() const
+bool Window::isDirty(unsigned int type) const
 {
-	return mIsdirty;
+	return mDirty != DT_CLEAR;
 }
 
 bool Window::isMousePassThroughEnabled()const

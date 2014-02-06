@@ -31,8 +31,8 @@ RenderWindow(win, renderer)
 	mWnd = ::CreateWindowEx(WS_EX_LAYERED /*^ WS_EX_TOOLWINDOW*/, 
 		win->getName().c_str(), 
 		win->getName().c_str(), 
-		0,
-		CW_USEDEFAULT, CW_USEDEFAULT, win->getWidth(), win->getHeight(),
+		WS_POPUP,
+		win->getAbsX(), win->getAbsY(), win->getWidth(), win->getHeight(),
 		NULL, NULL, instance, NULL);
 
 	HRESULT ret = ::GetLastError();
@@ -56,6 +56,8 @@ RectI GDIRenderWindow::getWorldAABB()
 void GDIRenderWindow::notifyUpdateWindow()
 {
 	Window* win = getWindow();
+
+	if (!win->isDirty(DT_POSITION | DT_SIZE)) return;
 	const RectI& rect = win->getAbsRect();
 	::SetWindowPos(mWnd, HWND_NOTOPMOST, rect.left, rect.top, rect.width(), rect.height(), SWP_NOACTIVATE);
 }
