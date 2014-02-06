@@ -19,6 +19,8 @@ BasicImage::BasicImage(Window* win, WindowRenderer* renderer):
 void BasicImage::notifyUpdateWindow()
 {
 	Window* win = getWindow();
+	if (!win->isDirty(DT_SIZE | DT_PROPERTY)) return;
+
 	WindowRenderer* renderer = getRenderer();
 	mGeom->clear();
 

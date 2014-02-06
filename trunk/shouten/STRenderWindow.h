@@ -10,7 +10,7 @@ namespace ST
 	{
 	public:
 		RenderWindow(Window* win, WindowRenderer* renderer);
-		~RenderWindow();
+		virtual ~RenderWindow();
 
 
 	};

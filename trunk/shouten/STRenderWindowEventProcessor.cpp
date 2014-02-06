@@ -27,27 +27,35 @@ LRESULT CALLBACK RenderWindowEventProcessor::WndProc(HWND hWnd, UINT msg, WPARAM
 
 		switch (msg)
 		{
-			//case WM_LBUTTONDOWN:
-			//{
-			//					   ST::Window* win = root->getHitWindow(LOWORD(lParam), HIWORD(lParam));
-			//					   if (win) win->injectMouseButtonDown(ST::Mouse::LeftButton);
-			//}
-			//	//SendMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
-			//	break;
-			//case WM_LBUTTONUP:
-			//{
-			//					 ST::Window* win = root->getHitWindow(LOWORD(lParam), HIWORD(lParam));
-			//					 if (win) win->injectMouseButtonUp(ST::Mouse::LeftButton);
-			//}
-			//	//SendMessage(hWnd, WM_NCLBUTTONUP, HTCAPTION, lParam);
-			//	break;
+			case WM_LBUTTONDOWN:
+			{
+								   Window* root = (*i)->getWindow();
+								   int x = LOWORD(lParam);
+								   int y = HIWORD(lParam);
+								   Window* win = root->getHitWindow(x, y);
+								   if (win) win->injectMouseButtonDown(Mouse::LeftButton);			}
+				//SendMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
+				break;
+			case WM_LBUTTONUP:
+			{
+								 Window* root = (*i)->getWindow();
+								 int x = LOWORD(lParam);
+								 int y = HIWORD(lParam);
+								 Window* win = root->getHitWindow(x, y);
+								 if (win) win->injectMouseButtonUp(Mouse::LeftButton);			}
+				//SendMessage(hWnd, WM_NCLBUTTONUP, HTCAPTION, lParam);
+				break;
 		case WM_MOUSEMOVE:
 		{
 							 Window* root = (*i)->getWindow();
-							 Window* win = root->getChild(L"child");
-							  //root->injectMouseMove(LOWORD(lParam), HIWORD(lParam), 0, 0);
-							 // ST::Window* win = root->getHitWindow(LOWORD(lParam), HIWORD(lParam));
-							 if (win) win->injectMouseMove(LOWORD(lParam), HIWORD(lParam), 0, 0);
+							 int x = LOWORD(lParam);
+							 int y = HIWORD(lParam);
+							 static int lastx = x;
+							 static int lasty = y;
+							 Window* win = root->getHitWindow(x, y);
+							 if (win) win->injectMouseMove(x, y, x - lastx, y - lasty);
+							 lastx = x;
+							 lasty = y;
 		}
 			break;
 		}

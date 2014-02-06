@@ -103,7 +103,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		ws.addRenderObjectFactory(GDIRenderWindowFactory::NAME, &rwFactory);
 		ws.addRenderObjectFactory(BasicImageFactory::NAME, &biFactory);
 
-
+		//ws.loadScript(L"test.tt");
+		
 		ws.loadScript(L"WindowManager.tt");
 		ws.loadScript(L"Window.tt");
 

@@ -10,6 +10,18 @@
 
 namespace ST
 {
+	enum DirtyType
+	{
+		DT_CLEAR = 0,
+		DT_CHILD_WIN = 1,
+
+		DT_SIZE = 1 << 1,
+		DT_POSITION = 1 << 2,
+		DT_PROPERTY = 1 << 3,
+
+		DT_ALL = 0xffffffff
+	};
+
 	class ShoutenExport Window
 	{
 		friend class WindowHelper;
@@ -54,8 +66,8 @@ namespace ST
 		void setHeight(int h);
 		void setSize(int w, int h);
 
-		void dirty();
-		bool isDirty() const;
+		void dirty(unsigned int type);
+		bool isDirty(unsigned int type = DT_ALL) const;
 		bool isMousePassThroughEnabled()const;
 
 		class WindowHitTest
@@ -120,10 +132,12 @@ namespace ST
 		using Children = std::hash_map<String, Window*>;
 		Children mChildren;
 
-		bool mIsdirty;
 		bool mMousePassThrough;
 		RectI mRect;
 
+
+
+		unsigned int mDirty;
 
 
 	};
