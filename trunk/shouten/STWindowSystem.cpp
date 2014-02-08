@@ -4,11 +4,15 @@
 #include "STWindow.h"
 #include "Touten.h"
 #include "TTBind.h"
+#include "TTMemoryAllocator.h"
 
 using namespace ST;
 
-WindowSystem::WindowSystem()
+WindowSystem::WindowSystem(AllocMethod func)
 {
+	if (func != nullptr)
+		TT::MemoryAllocator::setupMethod(func);
+
 	mTouten = new TT::Touten();
 	mBind = new TT::Bind(mTouten);
 }

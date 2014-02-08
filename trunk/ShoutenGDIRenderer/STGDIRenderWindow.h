@@ -4,7 +4,7 @@
 #include "STGDIRendererCommon.h"
 #include "STRenderWindow.h"
 #include "STRenderObjectFactory.h"
-
+#include "STColour.h"
 namespace ST
 {
 	class ShoutenGDIRenderer GDIRenderWindow : public RenderWindow
@@ -14,12 +14,13 @@ namespace ST
 		~GDIRenderWindow();
 
 		RectI getWorldAABB();
-		void notifyUpdateWindow();
+		void notifyUpdateWindow(unsigned int dirty);
 		void render();
 
 
 	private:
 		HWND mWnd;
+		ARGB mBackgroundColor;
 	};
 
 	class ShoutenGDIRenderer GDIRenderWindowFactory : public RenderObjectFactory

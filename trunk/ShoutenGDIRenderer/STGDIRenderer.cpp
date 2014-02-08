@@ -19,6 +19,7 @@ GDIRenderer::GDIRenderer()
 
 GDIRenderer::~GDIRenderer()
 {
+	uninitialise();
 	::GdiplusShutdown(mGDIPToken);
 }
 
@@ -113,7 +114,11 @@ void GDIRenderer::initialise(int width, int height)
 
 void GDIRenderer::uninitialise()
 {
-	delete mDefaultTarget;
+	// Õ∑≈sharedptr
+	mTextureMap.clear();
+
+	if (mDefaultTarget) delete mDefaultTarget;
+	mDefaultTarget = nullptr;
 }
 
 //================================================================================

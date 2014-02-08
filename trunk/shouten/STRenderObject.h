@@ -4,7 +4,7 @@
 #include "STCommon.h"
 #include "STVector.h"
 #include "STRect.h"
-
+#include "STMatrix.h"
 namespace ST
 {
 	class ShoutenExport RenderObject
@@ -23,8 +23,9 @@ namespace ST
 		void removeGeometry(size_t index);
 		void removeAllGeometry();
 
+		const Matrix4& getFullTransform();
 		virtual RectI getWorldAABB();
-		virtual void notifyUpdateWindow();
+		virtual void notifyUpdateWindow(unsigned int dirty);
 		virtual void render() ;
 	private:
 		WindowRenderer* mRenderer;
@@ -33,6 +34,9 @@ namespace ST
 
 		using GeometryVec = std::vector<Geometry*>;
 		GeometryVec mGeometryVec;
+
+		Matrix4 mFullTransform;
+		bool mTransformOutOfData;
 	};
 }
 

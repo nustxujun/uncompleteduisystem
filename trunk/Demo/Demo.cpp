@@ -21,20 +21,23 @@ TestMem mem;
 
 #include "Shouten.h"
 #include <Windows.h>
-
-
-
-
+#include "../touten/TTbind.h"
+#include <fstream>
 
 //#define MEM_DEBUG
 
 size_t memsize = 0;
+
 
 struct REC
 {
 	int create;
 	int release;
 	std::set<void*> addr;
+
+	REC():
+		create(0), release(0)
+	{}
 };
 std::map<int, REC > memrecord;
 
@@ -50,7 +53,7 @@ void* alloc(void* optr, size_t nsize)
 #ifdef MEM_DEBUG
 		memrecord[*s].release += 1;
 		memrecord[*s].addr.erase(optr);
-		printf("total:%10d, current:- %d\n", memsize, *s);
+		printf("%x total:%10d, current:- %d\n",s, memsize, *s);
 #endif
 		::free(s);
 	}
@@ -64,7 +67,7 @@ void* alloc(void* optr, size_t nsize)
 #ifdef MEM_DEBUG
 			memrecord[*s].release += 1;
 			memrecord[*s].addr.erase(optr);
-			printf("total:%10d, current:- %d\n", memsize, *s);
+			printf("%x total:%10d, current:- %d\n",s, memsize, *s);
 #endif
 		}
 		s = (int*)::realloc(s, nsize + 4);
@@ -74,7 +77,8 @@ void* alloc(void* optr, size_t nsize)
 #ifdef MEM_DEBUG
 		memrecord[*s].create += 1;
 		memrecord[*s].addr.insert(optr);
-		printf("total:%10d, current:+ %d\n", memsize, *s);
+		printf("%x total:%10d, current:+ %d\n", s, memsize, *s);
+
 #endif
 	}
 #endif
@@ -83,21 +87,29 @@ void* alloc(void* optr, size_t nsize)
 
 #include "../ShoutenGDIRenderer/STGDIRenderer.h"
 #include "../ShoutenGDIRenderer/STGDIRenderWindow.h"
+#include <iostream>
+//#pragma comment(lib, "Msimg32.lib") 
 
-#pragma comment(lib, "Msimg32.lib") 
+void Print(const ST::String& text)
+{
+	std::wcout << text << std::endl;
+}
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	const int winWidth = 800;
-	const int winHeight = 600;
+	const int winWidth = 640;
+	const int winHeight = 480;
+
 
 	using namespace ST;
 	{
-		WindowSystem ws;
+		WindowSystem ws(alloc);
 		GDIRenderer renderer;
 		GDIRenderWindowFactory rwFactory;
 		BasicImageFactory biFactory;
 		RenderWindowEventProcessor rwep;
+
+		//ws.getScriptBind()->bind(L"print", Print);
 
 		ws.addRenderer(L"gdirenderer", &renderer);
 		ws.addRenderObjectFactory(GDIRenderWindowFactory::NAME, &rwFactory);
@@ -107,6 +119,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		
 		ws.loadScript(L"WindowManager.tt");
 		ws.loadScript(L"Window.tt");
+		ws.loadScript(L"RenderWindow.tt");
+		ws.loadScript(L"WindowEventCollection.tt");
+
 
 		renderer.initialise(winWidth, winHeight);
 		renderer.createTexture(L"back",L"pic.jpg");
@@ -115,7 +130,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		CustomParameters paras;
 		paras[L"renderer"] = L"gdirenderer";
 		paras[L"renderobjectfactory"] = GDIRenderWindowFactory::NAME;
-		paras[WindowProperty::BACKGROUND_COLOUR] = L"255,255,255";
+		paras[WindowProperty::BACKGROUND_COLOUR] = L"0x00000000";
+		paras[WindowProperty::SCRIPT_INITIALIZER] = L"InitializeRenderWindow";
 		Window* w = wm.createWindow(L"root", &paras);
 		//w->setPosition(100, 100);
 		w->setSize(winWidth, winHeight);
@@ -125,9 +141,18 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		paras[L"renderobjectfactory"] = BasicImageFactory::NAME;
 		paras[WindowProperty::BACKGROUND_COLOUR] = L"0x80ff0000";
+		paras[WindowProperty::SCRIPT_INITIALIZER] = L"InitializeWindow";
 		w = w->createChild(L"child", &paras);
 		w->setSize(100, 50);
 		w->setPosition(0, 0);
+
+		paras[L"renderobjectfactory"] = BasicImageFactory::NAME;
+		paras[WindowProperty::BACKGROUND_COLOUR] = L"0x80ffff00";
+		paras[WindowProperty::SCRIPT_INITIALIZER] = L"InitializeWindow";
+		w = w->createChild(L"child1", &paras);
+		w->setSize(50, 25);
+		w->setPosition(0, 0);
+
 		while (true)
 		{
 			RenderWindowEventProcessor::pumpMessage();

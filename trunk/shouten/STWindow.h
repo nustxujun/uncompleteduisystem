@@ -7,6 +7,7 @@
 #include "STVector.h"
 #include "STInput.h"
 #include "STRenderObject.h"
+#include "STWindowProperty.h"
 
 namespace ST
 {
@@ -18,6 +19,7 @@ namespace ST
 		DT_SIZE = 1 << 1,
 		DT_POSITION = 1 << 2,
 		DT_PROPERTY = 1 << 3,
+		DT_PARENT_TRANSFORM = 1 << 4,
 
 		DT_ALL = 0xffffffff
 	};
@@ -75,7 +77,7 @@ namespace ST
 		public :
 			bool operator()(int x, int y, Window* win)
 			{
-				return win->getRenderObject()->getWorldAABB().inside(x, y);
+				return win->getWorldAABB().inside((float)x, (float)y);
 			}
 		};
 
@@ -106,7 +108,8 @@ namespace ST
 		virtual void uninitialize();
 		virtual void close();
 		virtual void draw();
-
+		virtual void update();
+		virtual const RectF& getWorldAABB();
 
 		//event
 		virtual void injectMouseMove(int posx, int posy, int deltax, int deltay);
@@ -133,9 +136,11 @@ namespace ST
 		Children mChildren;
 
 		bool mMousePassThrough;
+		bool mWorldAABBInvalid;
+		bool mClipByParent;
+
 		RectI mRect;
-
-
+		RectF mWorldAABB;
 
 		unsigned int mDirty;
 

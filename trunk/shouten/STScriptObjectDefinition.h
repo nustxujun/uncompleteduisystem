@@ -14,6 +14,8 @@ namespace ST
 		static const Char* UNINITIALIZE_WINDOW_MANAGER;
 		static const Char* GET_WINDOW_MANAGER;
 
+		static const Char* INITIALIZE_WINDOW;
+
 		static const Char* ADD_WINDOW_FUNCTION;
 
 		static const Char* INJECT_MOUSE_MOVE;

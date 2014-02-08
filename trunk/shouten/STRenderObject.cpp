@@ -8,9 +8,10 @@
 using namespace ST;
 
 RenderObject::RenderObject(Window* win, WindowRenderer* renderer) :
-	mWindow(win), mRenderer(renderer)
+	mWindow(win), mRenderer(renderer), mTransformOutOfData(true)
 {
 	mTarget = renderer->getDefaultRenderTarget();
+
 }
 
 RenderObject::~RenderObject()
@@ -73,11 +74,7 @@ void RenderObject::removeAllGeometry()
 
 void RenderObject::render()
 {
-	Matrix4 mat;
-	Vector3 pos((float)mWindow->getAbsX(), (float)mWindow->getAbsY(), 0);
-	Quaternion orien = Quaternion::IDENTITY;
-	Vector3 scale(1, 1, 1);
-	mat.makeTransform(pos, scale, orien);
+	Matrix4 mat = getFullTransform();
 
 	mTarget->activate();
 
@@ -90,6 +87,20 @@ void RenderObject::render()
 	mTarget->deactivate();
 }
 
+const Matrix4& RenderObject::getFullTransform()
+{
+	if (!mTransformOutOfData) return mFullTransform;
+
+	Vector3 pos((float)mWindow->getAbsX(), (float)mWindow->getAbsY(), 0);
+	Quaternion orien = Quaternion::IDENTITY;
+	Vector3 scale(1, 1, 1);
+	mFullTransform.makeTransform(pos, scale, orien);
+
+	mTransformOutOfData = false;
+	return mFullTransform;
+}
+
+
 RectI RenderObject::getWorldAABB()
 {
 	RectF aabb;
@@ -98,12 +109,15 @@ RectI RenderObject::getWorldAABB()
 		aabb.merge(geom->getAABB());
 	});
 
+	aabb.transform(getFullTransform());
 	return aabb;
 }
 
 
-void RenderObject::notifyUpdateWindow()
+void RenderObject::notifyUpdateWindow(unsigned int dirty)
 {
+	if ((dirty & DT_POSITION) | (dirty & DT_PARENT_TRANSFORM))
+		mTransformOutOfData = true;
 }
 
 
