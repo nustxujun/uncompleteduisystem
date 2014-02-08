@@ -13,11 +13,13 @@ BasicImage::BasicImage(Window* win, WindowRenderer* renderer):
 {
 	mGeom = createGeometry();
 
-	notifyUpdateWindow();
+	//notifyUpdateWindow();
 }
 
-void BasicImage::notifyUpdateWindow()
+void BasicImage::notifyUpdateWindow(unsigned int dirty)
 {
+	RenderObject::notifyUpdateWindow(dirty);
+
 	Window* win = getWindow();
 	if (!win->isDirty(DT_SIZE | DT_PROPERTY)) return;
 

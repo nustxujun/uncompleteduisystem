@@ -13,7 +13,8 @@
 using namespace ST;
 
 Window::Window(const String& name, const WindowFactory* f, WindowManager* wm) :
-mName(name), mFactory(f), mManager(wm), mDirty(DT_ALL), mMousePassThrough(false)
+mName(name), mFactory(f), mManager(wm), mDirty(DT_ALL), mMousePassThrough(false),
+mWorldAABBInvalid(true), mClipByParent(true)
 {
 	mPropertys[WindowProperty::PROPERTY_NULL] = WindowProperty::PROPERTY_NULL;
 }
@@ -47,7 +48,13 @@ void Window::initializeScript()
 	helper.registerFunction(
 		bind, L"getY", this, &Window::getY);
 
-	bind.call<void>(L"InitializeWindow", mName.c_str());
+	const String& script = getProperty(WindowProperty::SCRIPT_INITIALIZER);
+	const Char* initialiser = ScriptObject::INITIALIZE_WINDOW;
+	if (script != WindowProperty::PROPERTY_NULL)
+		initialiser = script.c_str();
+
+	bind.call<void>(initialiser, mName.c_str());
+
 }
 
 void Window::uninitializeScript()
@@ -155,13 +162,32 @@ void Window::close()
 	mManager->destroyWindow(mName);
 }
 
+void Window::update()
+{
+	if (!isDirty()) return;
+	if (isDirty(DT_POSITION))
+	{
+		std::for_each(mChildren.begin(), mChildren.end(),
+					  [](Children::value_type& c)
+		{
+			c.second->dirty(DT_PARENT_TRANSFORM);
+		});
+
+		mWorldAABBInvalid = true;
+	}
+
+	if (isDirty(DT_PARENT_TRANSFORM) && mParent)
+		mWorldAABBInvalid = true;
+
+	mRenderObject->notifyUpdateWindow(mDirty);
+
+	mDirty = DT_CLEAR;
+}
+
+
 void Window::draw()
 {
-	if (isDirty())
-	{
-		mRenderObject->notifyUpdateWindow();
-		mDirty = DT_CLEAR;
-	}
+	update();
 
 	mRenderObject->render();
 
@@ -171,6 +197,28 @@ void Window::draw()
 			c.second->draw();
 		});
 }
+
+const RectF& Window::getWorldAABB()
+{
+	if (mWorldAABBInvalid)
+	{
+		mWorldAABB = mRenderObject->getWorldAABB();
+		if (mClipByParent && mParent)
+		{
+			const RectF& prect = mParent->getWorldAABB();
+			mWorldAABB.left = std::max(prect.left, mWorldAABB.left);
+			mWorldAABB.right = std::min(prect.right, mWorldAABB.right);
+			mWorldAABB.top = std::max(prect.top, mWorldAABB.top);
+			mWorldAABB.bottom = std::min(prect.bottom, mWorldAABB.bottom);
+		}
+		
+		mWorldAABBInvalid = false;
+	}
+
+	return mWorldAABB;
+
+}
+
 
 const String& Window::getName()const
 {

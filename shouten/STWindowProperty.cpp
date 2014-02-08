@@ -9,3 +9,4 @@ const Char* WindowProperty::BACKGROUND_COLOUR = L"backgroundcolour";
 
 const Char* WindowProperty::RENDERER = L"renderer";
 const Char* WindowProperty::RENDER_OBJECT_FACTORY = L"renderobjectfactory";
+const Char* WindowProperty::SCRIPT_INITIALIZER = L"scriptinitializer";

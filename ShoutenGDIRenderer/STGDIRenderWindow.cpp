@@ -2,6 +2,7 @@
 #include "STWindow.h"
 #include "STRenderWindowEventProcessor.h"
 #include "STGDIRenderTarget.h"
+#include "STStringUtil.h"
 
 using namespace ST;
 
@@ -53,13 +54,15 @@ RectI GDIRenderWindow::getWorldAABB()
 	RectI rect(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
 	return rect;
 }
-void GDIRenderWindow::notifyUpdateWindow()
+void GDIRenderWindow::notifyUpdateWindow(unsigned int dirty)
 {
-	Window* win = getWindow();
-
-	if (!win->isDirty(DT_POSITION | DT_SIZE)) return;
-	const RectI& rect = win->getAbsRect();
+	if (!(dirty & (DT_POSITION | DT_SIZE))) return;
+	const RectI& rect = getWindow()->getAbsRect();
 	::SetWindowPos(mWnd, HWND_NOTOPMOST, rect.left, rect.top, rect.width(), rect.height(), SWP_NOACTIVATE);
+
+	if (dirty & DT_PROPERTY)
+		mBackgroundColor = StringUtil::toColour(
+		getWindow()->getProperty(WindowProperty::BACKGROUND_COLOUR)).getAsARGB();
 }
 
 void GDIRenderWindow::render()
@@ -90,7 +93,7 @@ void GDIRenderWindow::render()
 	//  o-> fill -> child draw -> update dc ->o
 	//	|_____________________________________|
 
-	target->fill(0x80ffffff);
+	target->fill(mBackgroundColor);
 
 }
 

@@ -14,6 +14,7 @@ namespace ST
 
 		static const Char* RENDERER;
 		static const Char* RENDER_OBJECT_FACTORY;
+		static const Char* SCRIPT_INITIALIZER;
 	};
 }
 

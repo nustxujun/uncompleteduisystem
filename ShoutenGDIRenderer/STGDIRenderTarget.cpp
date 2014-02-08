@@ -20,6 +20,8 @@ mRenderer(renderer), mHeight(height), mWidth(width)
 	bi.biCompression = BI_RGB;
 	mBitmap = ::CreateDIBSection(screen, (BITMAPINFO*)&bi, 0, (void**)&mBuffer, 0, 0);
 
+	assert(mBitmap);
+
 	HRESULT ret = GetLastError();
 
 	::ReleaseDC(NULL, screen);

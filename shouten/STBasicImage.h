@@ -14,7 +14,7 @@ namespace ST
 		BasicImage(Window* win, WindowRenderer* renderer);
 		~BasicImage();
 
-		void notifyUpdateWindow();
+		void notifyUpdateWindow(unsigned int dirty);
 
 	private:
 		Geometry* mGeom;

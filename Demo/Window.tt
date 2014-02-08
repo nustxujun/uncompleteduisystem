@@ -11,26 +11,70 @@ global function CloseWindow(winname)
 	RemoveWindow(winname);
 }
 
-global function OnEvent(winname, method,...)
+global function OnWindowEvent(winname, method,...)
 {
 	win &= GetWindow(winname);
 	win[method](...);
 }
 
-global function InjectMouseMove(winname, x, y, dx, dy)
-{
-	OnEvent(winname, "OnMouseMove", x, y, dx, dy);
-}
 
 function OnMouseMove(x,y,dx,dy)
 {
-	$setPosition($getX() + dx, $getY() + dy);
+	if ($mouseButtonLeft == true)
+	{
+		$setPosition($getX() + dx, $getY() + dy);
+	}
 }
+
+function OnMouseButtonDown(id)
+{
+	
+		$mouseButtonLeft = true;
+
+}
+
+function OnMouseButtonUp(id)
+{
+
+		$mouseButtonLeft = false;
+
+}
+
+function OnMouseWheel(dx, dy)
+{
+}
+
+function OnKeyDown(id)
+{
+}
+
+function OnKeyUp(id)
+{
+}
+ 
+
+function OnMouseEnter(x, y)
+{
+	
+}
+
+function OnMouseLeave(x, y)
+{
+	$mouseButtonLeft = false;
+}
+
 
 global function InitializeWindow(name)
 {
 	win &= GetWindow(name);
 
 	win.OnMouseMove = OnMouseMove;
+	win.OnMouseButtonDown = OnMouseButtonDown;
+	win.OnMouseButtonUp = OnMouseButtonUp;
+	win.OnMouseWheel = OnMouseWheel;
+	win.OnKeyDown = OnKeyDown;
+	win.OnKeyUp = OnKeyUp;
+	win.OnMouseEnter = OnMouseEnter;
+	win.OnMouseLeave = OnMouseLeave;
 }
 
