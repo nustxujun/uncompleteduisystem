@@ -30,35 +30,35 @@ LRESULT CALLBACK RenderWindowEventProcessor::WndProc(HWND hWnd, UINT msg, WPARAM
 
 			case WM_LBUTTONDOWN:
 			{
-								   Window* root = (*i)->getWindow();
-								   int x = LOWORD(lParam);
-								   int y = HIWORD(lParam);
-								   Window* win = root->getHitWindow(x, y);
-								   if (win) win->injectMouseButtonDown(Mouse::LeftButton);			
+				Window* root = (*i)->getWindow();
+				int x = LOWORD(lParam);
+				int y = HIWORD(lParam);
+				Window* win = root->getHitWindow(x, y);
+				if (win) win->injectMouseButtonDown(Mouse::LeftButton);
 			}
 			//SendMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
 			break;
 			case WM_LBUTTONUP:
 			{
-								 Window* root = (*i)->getWindow();
-								 int x = LOWORD(lParam);
-								 int y = HIWORD(lParam);
-								 Window* win = root->getHitWindow(x, y);
-								 if (win) win->injectMouseButtonUp(Mouse::LeftButton);			
+				Window* root = (*i)->getWindow();
+				int x = LOWORD(lParam);
+				int y = HIWORD(lParam);
+				Window* win = root->getHitWindow(x, y);
+				if (win) win->injectMouseButtonUp(Mouse::LeftButton);
 			}
 			//SendMessage(hWnd, WM_NCLBUTTONUP, HTCAPTION, lParam);
 			break;
 			case WM_MOUSEMOVE:
 			{
-								 Window* root = (*i)->getWindow();
-								 int x = LOWORD(lParam);
-								 int y = HIWORD(lParam);
-								 static int lastx = x;
-								 static int lasty = y;
-								 Window* win = root->getHitWindow(x, y);
-								 if (win) win->injectMouseMove(x, y, x - lastx, y - lasty);
-								 lastx = x;
-								 lasty = y;
+				Window* root = (*i)->getWindow();
+				int x = LOWORD(lParam);
+				int y = HIWORD(lParam);
+				static int lastx = x;
+				static int lasty = y;
+				Window* win = root->getHitWindow(x, y);
+				if (win) win->injectMouseMove(x, y, x - lastx, y - lasty);
+				lastx = x;
+				lasty = y;
 			}
 			break;
 		}
