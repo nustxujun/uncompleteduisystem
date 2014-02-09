@@ -89,6 +89,8 @@ void* alloc(void* optr, size_t nsize)
 #include "../ShoutenGDIRenderer/STGDIRenderWindow.h"
 #include <iostream>
 //#pragma comment(lib, "Msimg32.lib") 
+#include "../Touten/TTMemoryAllocator.h"
+#pragma comment(lib, "touten.lib") 
 
 void Print(const ST::String& text)
 {
@@ -103,7 +105,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	using namespace ST;
 	{
-		WindowSystem ws(alloc);
+		TT::MemoryAllocator::setupMethod(alloc);
+		WindowSystem ws;
 		GDIRenderer renderer;
 		GDIRenderWindowFactory rwFactory;
 		BasicImageFactory biFactory;

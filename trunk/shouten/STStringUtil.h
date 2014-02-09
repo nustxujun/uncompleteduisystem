@@ -3,6 +3,7 @@
 
 #include "STCommon.h"
 #include "STColour.h"
+#include <sstream>
 
 namespace ST
 {

@@ -14,11 +14,8 @@ namespace ST
 {
 	class ShoutenExport WindowSystem : public Singleton<WindowSystem>
 	{
-	public :
-		typedef void* (*AllocMethod) (void* optr, size_t nsize);
-
 	public:
-		WindowSystem(AllocMethod func = nullptr);
+		WindowSystem();
 		~WindowSystem();
 
 		WindowRenderer* getRenderer(const String& name);
