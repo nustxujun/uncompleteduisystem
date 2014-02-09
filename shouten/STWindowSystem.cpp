@@ -8,11 +8,8 @@
 
 using namespace ST;
 
-WindowSystem::WindowSystem(AllocMethod func)
+WindowSystem::WindowSystem()
 {
-	if (func != nullptr)
-		TT::MemoryAllocator::setupMethod(func);
-
 	mTouten = new TT::Touten();
 	mBind = new TT::Bind(mTouten);
 }
