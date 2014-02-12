@@ -1,0 +1,38 @@
+lastWindow = "";
+
+global function InjectMouseMove(winname, x, y, dx, dy)
+{
+	if (winname != @lastWindow)
+	{
+		OnWindowEvent(@lastWindow, "OnMouseLeave", x, y);
+		OnWindowEvent(winname, "onMouseEnter", x, y);
+		@lastWindow = winname;
+	}
+	else
+		OnWindowEvent(winname, "onMouseMove", x, y, dx, dy);
+}
+
+global function InjectMouseButtonDown(winname, id)
+{
+	OnWindowEvent(winname, "onMouseButtonDown", id);
+}
+
+global function InjectMouseButtonUp(winname, id)
+{
+	OnWindowEvent(winname, "onMouseButtonUp", id);
+}
+
+global function InjectMouseWheel(winname, dx, dy)
+{
+	OnWindowEvent(winname, "onMouseWheel", dx, dy);
+}
+
+global function InjectKeyDown(winname, id)
+{
+	OnWindowEvent(winname, "onKeyDown", id);
+}
+
+global function InjectKeyUp(winname, id)
+{
+	OnWindowEvent(winname, "onKeyUp", id);
+}
