@@ -63,18 +63,36 @@ function OnMouseLeave(x, y)
 	$mouseButtonLeft = false;
 }
 
+function CreateChild(name, paras)
+{
+	$createChildImpl(name ,paras);
+	$_children[name] &= GetWindow(name);
+	return $_children[name];
+}
+
+function GetChild(name)
+{
+	return $_children[name];
+}
+
 
 global function InitializeWindow(name)
 {
 	win &= GetWindow(name);
 
-	win.OnMouseMove = OnMouseMove;
-	win.OnMouseButtonDown = OnMouseButtonDown;
-	win.OnMouseButtonUp = OnMouseButtonUp;
-	win.OnMouseWheel = OnMouseWheel;
-	win.OnKeyDown = OnKeyDown;
-	win.OnKeyUp = OnKeyUp;
-	win.OnMouseEnter = OnMouseEnter;
-	win.OnMouseLeave = OnMouseLeave;
+	win.name = name;
+	
+	win.onMouseMove = OnMouseMove;
+	win.onMouseButtonDown = OnMouseButtonDown;
+	win.onMouseButtonUp = OnMouseButtonUp;
+	win.onMouseWheel = OnMouseWheel;
+	win.onKeyDown = OnKeyDown;
+	win.onKeyUp = OnKeyUp;
+	win.onMouseEnter = OnMouseEnter;
+	win.onMouseLeave = OnMouseLeave;
+
+	win.createChild = CreateChild;
+	win.getChild = GetChild;
+
 }
 

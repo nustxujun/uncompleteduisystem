@@ -71,6 +71,9 @@ namespace ST
 		void dirty(unsigned int type);
 		bool isDirty(unsigned int type = DT_ALL) const;
 		bool isMousePassThroughEnabled()const;
+		void setMousePassThrough(bool val);
+		bool isClippedByParent()const;
+		void setClippedByParent(bool val);
 
 		class WindowHitTest
 		{
@@ -137,7 +140,7 @@ namespace ST
 
 		bool mMousePassThrough;
 		bool mWorldAABBInvalid;
-		bool mClipByParent;
+		bool mClippedByParent;
 
 		RectI mRect;
 		RectF mWorldAABB;

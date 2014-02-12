@@ -13,7 +13,7 @@ namespace ST
 	typedef std::wstring String;
 	
 	typedef std::map<String, String> CustomParameters;
-
+	typedef std::vector<String>	StringVec;
 
 	class Geometry;
 

@@ -89,6 +89,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="STException.h" />
     <ClInclude Include="STGeometry.h" />
+    <ClInclude Include="STInitializer.h" />
     <ClInclude Include="STInput.h" />
     <ClInclude Include="STMatrix.h" />
     <ClInclude Include="STPlatform.h" />
@@ -111,6 +112,7 @@
     <ClInclude Include="STWindowFactory.h" />
     <ClInclude Include="STWindowHelper.h" />
     <ClInclude Include="STWindowManager.h" />
+    <ClInclude Include="STWindowManagerHelper.h" />
     <ClInclude Include="STWindowProperty.h" />
     <ClInclude Include="STWindowRenderer.h" />
     <ClInclude Include="STWindowSystem.h" />
@@ -123,6 +125,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="STException.cpp" />
     <ClCompile Include="STGeometry.cpp" />
+    <ClCompile Include="STInitializer.cpp" />
     <ClCompile Include="STMatrix.cpp" />
     <ClCompile Include="STQuaternion.cpp" />
     <ClCompile Include="STRenderObject.cpp" />
@@ -133,7 +136,9 @@
     <ClCompile Include="STStringUtil.cpp" />
     <ClCompile Include="STWindow.cpp" />
     <ClCompile Include="STWindowFactory.cpp" />
+    <ClCompile Include="STWindowHelper.cpp" />
     <ClCompile Include="STWindowManager.cpp" />
+    <ClCompile Include="STWindowManagerHelper.cpp" />
     <ClCompile Include="STWindowProperty.cpp" />
     <ClCompile Include="STWindowSystem.cpp" />
   </ItemGroup>

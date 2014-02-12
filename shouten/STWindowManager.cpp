@@ -3,34 +3,53 @@
 #include "STException.h"
 #include "STWindow.h"
 #include "STWindowSystem.h"
+#include "STWindowManagerHelper.h"
+#include "TTBind.h"
 
 using namespace ST;
 
 WindowManager::WindowManager()
 {
-	registerFactory(DefaultWinFactory::NAME,&mDefaultFactory);
 
-	initializeScript();
+
 
 }
 
 WindowManager::~WindowManager()
+{
+
+
+}
+
+void WindowManager::initializeImpl(const StringVec& files)
+{
+	registerFactory(DefaultWinFactory::NAME, &mDefaultFactory);
+
+	initializeScript(files);
+}
+
+void WindowManager::uninitializeImpl()
 {
 	std::for_each(mWindows.begin(), mWindows.end(), [](Windows::value_type e){
 		delete e.second;
 	});
 
 	uninitialzeScript();
-
 }
 
-void WindowManager::initializeScript()
+void WindowManager::initializeScript(const StringVec& files)
 {
-	//WindowSystem& sys = WindowSystem::getSingleton();
-	//sys.loadScript(L"WindowManager.tt");
-	//sys.loadScript(L"Window.tt");
-	
-	//mTouten->call(ScriptObject::INITIALIZE_WINDOW_MANAGER);
+	WindowManagerHelper helper;
+	helper.registerFunction(this);
+
+	WindowSystem& sys = WindowSystem::getSingleton();
+
+	auto endi = files.end();
+	for (auto i = files.begin(); i != endi; ++i)
+		sys.loadScript(*i);
+
+	sys.getScriptBind()->call<void>(ScriptObject::INITIALIZE_WINDOW_MANAGER);
+
 }
 
 void WindowManager::uninitialzeScript()

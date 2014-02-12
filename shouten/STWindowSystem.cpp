@@ -12,6 +12,9 @@ WindowSystem::WindowSystem()
 {
 	mTouten = new TT::Touten();
 	mBind = new TT::Bind(mTouten);
+
+	mDefaultRenderer = nullptr;
+	mROFactorys[RenderObjectFactory::NAME] = &mDefaultROFactory;
 }
 
 WindowSystem::~WindowSystem()
@@ -32,9 +35,20 @@ WindowRenderer* WindowSystem::getRenderer(const String& name)
 void WindowSystem::addRenderer(const String& name, WindowRenderer* wr)
 {
 	auto ret = mRenderers.insert(Renderers::value_type(name, wr));
-	if (ret.second) return;
+	if (ret.second)
+	{
+		if (mDefaultRenderer == nullptr) mDefaultRenderer = wr;
+		return;
+	}
 
 	ST_EXCEPT(L"windowrenderer is existed", L"WindowSystem::addRenderer");
+}
+
+WindowRenderer* WindowSystem::getDefaultRenderer()
+{
+	if (mDefaultRenderer != nullptr)
+		return mDefaultRenderer;
+	ST_EXCEPT(L"default windowrenderer is not existed", L"WindowSystem::getDefaultRenderer");
 }
 
 void WindowSystem::addRenderRoot(Window* root)
