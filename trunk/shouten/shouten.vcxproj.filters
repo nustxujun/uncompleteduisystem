@@ -129,6 +129,12 @@
     <ClInclude Include="STRenderWindowEventProcessor.h">
       <Filter>Render\RenderObject</Filter>
     </ClInclude>
+    <ClInclude Include="STWindowManagerHelper.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="STInitializer.h">
+      <Filter>Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -187,6 +193,15 @@
     </ClCompile>
     <ClCompile Include="STRenderWindow.cpp">
       <Filter>Render\RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="STWindowManagerHelper.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="STInitializer.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="STWindowHelper.cpp">
+      <Filter>Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

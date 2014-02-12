@@ -29,14 +29,18 @@ RenderWindow(win, renderer)
 
 	//int width = win->getWidth() ? win->getWidth() : CW_USEDEFAULT;
 	//int height = win->getHeight() ? win->getHeight() : CW_USEDEFAULT;
+
+	const RectI& rect = win->getRect();
+
 	mWnd = ::CreateWindowEx(WS_EX_LAYERED /*^ WS_EX_TOOLWINDOW*/, 
 		win->getName().c_str(), 
 		win->getName().c_str(), 
 		WS_POPUP,
-		win->getAbsX(), win->getAbsY(), win->getWidth(), win->getHeight(),
+		CW_USEDEFAULT, CW_USEDEFAULT, 1, 1,//WS_POPUP需要指定宽高
 		NULL, NULL, instance, NULL);
 
-	HRESULT ret = ::GetLastError();
+
+	//::SetWindowPos(mWnd, HWND_NOTOPMOST, rect.left + realrect.left, rect.top + realrect.top, rect.width(), rect.height(), SWP_NOACTIVATE);
 
 	::ShowWindow(mWnd, SW_SHOW);
 	::UpdateWindow(mWnd);
@@ -51,14 +55,17 @@ GDIRenderWindow::~GDIRenderWindow()
 
 RectI GDIRenderWindow::getWorldAABB()
 {
-	RectI rect(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
+	RectI rect = getWindow()->getRect();
 	return rect;
+
 }
 void GDIRenderWindow::notifyUpdateWindow(unsigned int dirty)
 {
 	if (!(dirty & (DT_POSITION | DT_SIZE))) return;
 	const RectI& rect = getWindow()->getAbsRect();
-	::SetWindowPos(mWnd, HWND_NOTOPMOST, rect.left, rect.top, rect.width(), rect.height(), SWP_NOACTIVATE);
+
+
+	::SetWindowPos(mWnd, HWND_NOTOPMOST, rect.left , rect.top , rect.width(), rect.height(), SWP_NOACTIVATE);
 
 	if (dirty & DT_PROPERTY)
 		mBackgroundColor = StringUtil::toColour(
@@ -67,7 +74,7 @@ void GDIRenderWindow::notifyUpdateWindow(unsigned int dirty)
 
 void GDIRenderWindow::render()
 {
-
+	using namespace std;
 	GDIRenderTarget* target = (GDIRenderTarget*)getRenderTarget();
 
 	HDC dc = GetDC(mWnd);
@@ -78,7 +85,7 @@ void GDIRenderWindow::render()
 	size_t winheight = winrect.bottom - winrect.top;
 	POINT dstpos = { winrect.left, winrect.top };
 	POINT srcpos = { 0, 0 };
-	SIZE size = { winwidth, winheight };
+	SIZE size = { min(winwidth, target->getWidth()), min(winheight, target->getHeight()) };
 	BLENDFUNCTION bf = { 0 };
 	bf.AlphaFormat = AC_SRC_ALPHA;
 	bf.BlendFlags = 0;

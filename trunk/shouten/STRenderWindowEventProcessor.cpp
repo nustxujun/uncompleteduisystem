@@ -27,7 +27,6 @@ LRESULT CALLBACK RenderWindowEventProcessor::WndProc(HWND hWnd, UINT msg, WPARAM
 
 		switch (msg)
 		{
-
 			case WM_LBUTTONDOWN:
 			{
 				Window* root = (*i)->getWindow();
@@ -36,7 +35,6 @@ LRESULT CALLBACK RenderWindowEventProcessor::WndProc(HWND hWnd, UINT msg, WPARAM
 				Window* win = root->getHitWindow(x, y);
 				if (win) win->injectMouseButtonDown(Mouse::LeftButton);
 			}
-			//SendMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
 			break;
 			case WM_LBUTTONUP:
 			{
@@ -64,7 +62,8 @@ LRESULT CALLBACK RenderWindowEventProcessor::WndProc(HWND hWnd, UINT msg, WPARAM
 		}
 
 	}
-	return DefWindowProc(hWnd, msg, wParam, lParam);
+	LRESULT ret =  DefWindowProc(hWnd, msg, wParam, lParam);
+	return ret;
 }
 
 

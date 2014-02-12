@@ -14,7 +14,7 @@ using namespace ST;
 
 Window::Window(const String& name, const WindowFactory* f, WindowManager* wm) :
 mName(name), mFactory(f), mManager(wm), mDirty(DT_ALL), mMousePassThrough(false),
-mWorldAABBInvalid(true), mClipByParent(true)
+mWorldAABBInvalid(true), mClippedByParent(true), mRect(0,0,0,0)
 {
 	mPropertys[WindowProperty::PROPERTY_NULL] = WindowProperty::PROPERTY_NULL;
 }
@@ -36,6 +36,12 @@ void Window::initializeScript()
 {
 	WindowHelper helper;
 	TT::Bind& bind = *WindowSystem::getSingleton().getScriptBind();
+	
+	bind.call<void>(L"RegisterWindow", mName.c_str()); //֪ͨscirpt
+
+
+	helper.registerBaseFunctions(this);
+
 	helper.registerFunction(
 		bind, L"close", this, &Window::close);
 
@@ -47,6 +53,25 @@ void Window::initializeScript()
 
 	helper.registerFunction(
 		bind, L"getY", this, &Window::getY);
+
+	helper.registerFunction(
+		bind, L"setSize", this, &Window::setSize);
+
+	helper.registerFunction(
+		bind, L"setProperty", this, &Window::setProperty);
+
+	helper.registerFunction(
+		bind, L"isClippedByParent", this, &Window::isClippedByParent);
+
+	helper.registerFunction(
+		bind, L"setClippedByParent", this, &Window::setClippedByParent);
+
+	helper.registerFunction(
+		bind, L"isMousePassThroughEnabled", this, &Window::isMousePassThroughEnabled);
+
+	helper.registerFunction(
+		bind, L"setMousePassThrough", this, &Window::setMousePassThrough);
+
 
 	const String& script = getProperty(WindowProperty::SCRIPT_INITIALIZER);
 	const Char* initialiser = ScriptObject::INITIALIZE_WINDOW;
@@ -117,9 +142,9 @@ void Window::parseParameter(const CustomParameters& paras)
 	{
 		auto ret = paras.find(WindowProperty::RENDERER);
 		if (ret != end)
-		{	
 			renderer = ws.getRenderer(ret->second);
-		}
+		else
+			renderer = ws.getDefaultRenderer();
 	}
 
 	//RenderObject
@@ -203,7 +228,7 @@ const RectF& Window::getWorldAABB()
 	if (mWorldAABBInvalid)
 	{
 		mWorldAABB = mRenderObject->getWorldAABB();
-		if (mClipByParent && mParent)
+		if (mClippedByParent && mParent)
 		{
 			const RectF& prect = mParent->getWorldAABB();
 			mWorldAABB.left = std::max(prect.left, mWorldAABB.left);
@@ -369,6 +394,22 @@ bool Window::isDirty(unsigned int type) const
 bool Window::isMousePassThroughEnabled()const
 {
 	return mMousePassThrough;
+}
+
+void Window::setMousePassThrough(bool val)
+{
+	mMousePassThrough = val;
+}
+
+
+bool Window::isClippedByParent()const
+{
+	return mClippedByParent;
+}
+
+void Window::setClippedByParent(bool val)
+{
+	mClippedByParent = val;
 }
 
 //event

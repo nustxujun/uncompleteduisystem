@@ -3,6 +3,7 @@
 
 #include "STCommon.h"
 #include "STSingleton.h"
+#include "STRenderObjectFactory.h"
 
 namespace TT
 {
@@ -20,6 +21,7 @@ namespace ST
 
 		WindowRenderer* getRenderer(const String& name);
 		void addRenderer(const String& name, WindowRenderer* wr);
+		WindowRenderer* getDefaultRenderer();
 
 		void addRenderRoot(Window* root);
 		void removeRenderRoot(Window* root);
@@ -33,6 +35,11 @@ namespace ST
 		void render();
 
 		TT::Bind* getScriptBind();
+
+	private:
+		void initialize();
+		void uninitialize();
+
 	private:
 		using Renderers = std::hash_map<String, WindowRenderer*>;
 		Renderers mRenderers;
@@ -45,6 +52,9 @@ namespace ST
 
 		TT::Touten* mTouten;
 		TT::Bind* mBind;
+
+		RenderObjectFactory mDefaultROFactory;
+		WindowRenderer* mDefaultRenderer;
 	};
 }
 

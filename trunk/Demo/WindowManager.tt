@@ -1,11 +1,39 @@
 windowManager;
 
-global function GetWindow(name)
+global function RegisterWindow(winname)
 {
-	return @windowManager[name];
+	@windowManager[winname] = null;
+	return @windowManager[winname];
 }
 
-global function RemoveWindow(name)
+global function CreateWindow(winname, paras)
 {
-	@windowManager[name] = null;
+	root &= @windowManager.__RootWindow;
+	win &= root.createChild(winname, paras);
+	win.setClippedByParent(false);
+	return win;
+}
+
+global function GetWindow(winname)
+{
+	return @windowManager[winname];
+}
+
+global function RemoveWindow(winname)
+{
+	@windowManager[winname] = null;
+}
+
+global function InitializeWindowManager()
+{
+	paras.renderer = 'gdirenderer';
+	paras.renderobjectfactory = 'GDIRenderWindowFactory'
+	paras.backgroundcolour = '0x00ffffff';
+	paras.scriptinitializer = 'InitializeRenderWindow';
+	CreateWindowImpl("__RootWindow",paras);
+	AddRootWindow("__RootWindow");
+	
+	root &= @windowManager.__RootWindow;
+	root.setSize(1024,768);
+	root.setMousePassThrough(true);
 }
