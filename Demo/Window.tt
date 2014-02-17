@@ -93,6 +93,8 @@ global function InitializeWindow(name)
 
 	win.createChild = CreateChild;
 	win.getChild = GetChild;
+	
+	
 
 }
 

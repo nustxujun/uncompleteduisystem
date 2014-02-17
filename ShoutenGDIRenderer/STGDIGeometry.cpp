@@ -37,6 +37,12 @@ const Vertex& GDIGeometry::getVertex(size_t index)const
 	return mVertexs[index];
 }
 
+Vertex& GDIGeometry::getVertex(size_t index)
+{
+	return mVertexs[index];
+}
+
+
 const RectF& GDIGeometry::getAABB()const
 {
 	return mRect;
