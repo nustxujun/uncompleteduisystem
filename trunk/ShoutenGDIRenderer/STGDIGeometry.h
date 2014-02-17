@@ -18,6 +18,7 @@ namespace ST
 		void addVertex(const Vertex& vert);
 		void addVertex(const Vertex* verts, size_t count);
 		size_t getVertexCount()const;
+		Vertex& getVertex(size_t index);
 		const Vertex& getVertex(size_t index)const;
 
 		void setTexture(Texture::Ptr tex);

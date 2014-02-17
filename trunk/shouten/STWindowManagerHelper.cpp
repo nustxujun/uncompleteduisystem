@@ -67,4 +67,5 @@ void WindowManagerHelper::registerFunction(WindowManager* wm)
 
 	bind.bind<AddRootWindowWrapper>(L"AddRootWindow", wm);
 
+
 }
