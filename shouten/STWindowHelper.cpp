@@ -61,7 +61,6 @@ void WindowHelper::registerBaseFunctions(Window* win)
 			{
 				if (obj->val->type != OT_ARRAY) return false;
 				Array* geomarr = obj->val->arr;
-				if (!geomarr->isArray()) return false;
 
 				auto getfloat = [](float& val, const Char* key, const Array* arr)->bool
 				{
@@ -156,7 +155,7 @@ void WindowHelper::registerBaseFunctions(Window* win)
 		}
 	};
 
-	registerFunction<SetGeometry>(bind, L"SetGeometry", win, win);
+	registerFunction<SetGeometry>(bind, L"setGeometry", win, win);
 
 
 }
