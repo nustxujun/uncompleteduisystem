@@ -15,11 +15,8 @@ namespace ST
 	class ShoutenGDIRenderer GDIRenderer : public WindowRenderer
 	{
 	public:
-		GDIRenderer();
+		GDIRenderer(int width, int height);
 		~GDIRenderer();
-
-		void initialise(int width, int height);
-		void uninitialise();
 
 		Geometry* createGeometry() ;
 		void destroyGeometry(Geometry* geom) ;
@@ -32,9 +29,13 @@ namespace ST
 
 		RenderTarget* getDefaultRenderTarget() ;
 
-		virtual void beginRendering();
-		virtual void endRendering();
+		void beginRendering();
+		void endRendering();
 
+		void setRenderSize(int width, int height);
+		const SizeI& getRenderSize()const;
+
+		//gdirenderer的所有绘制方法将对当前dc进行操作
 		void setCurrentDC(HDC dc);
 
 		void drawPoint(int x, int y, const Colour& color, int radius = 1);
@@ -46,6 +47,8 @@ namespace ST
 		void fillRect(const RectI& rect, const Colour& color);
 
 	private:
+		SizeI mRenderSize;
+
 		using TextureMap = std::hash_map<String, GDITexture::Ptr>;
 		TextureMap mTextureMap;
 

@@ -3,6 +3,7 @@
 
 #include "STCommon.h"
 #include "STTexture.h"
+#include "STSize.h"
 
 namespace ST
 {
@@ -23,6 +24,9 @@ namespace ST
 
 		virtual void beginRendering() = 0;
 		virtual void endRendering() = 0;
+
+		virtual void setRenderSize(int width, int height) = 0;
+		virtual const SizeI& getRenderSize()const = 0;
 	};
 }
 

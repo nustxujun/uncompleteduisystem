@@ -11,15 +11,22 @@
 using namespace ST;
 using namespace Gdiplus;
 
-GDIRenderer::GDIRenderer()
+GDIRenderer::GDIRenderer(int width, int height)
 {
 	::GdiplusStartupInput si;
 	::GdiplusStartup(&mGDIPToken, &si, NULL);
+
+	mDefaultTarget = new GDIRenderTarget(this, width, height);
 }
 
 GDIRenderer::~GDIRenderer()
 {
-	uninitialise();
+	//ÊÍ·Åsharedptr
+	mTextureMap.clear();
+
+	if (mDefaultTarget) delete mDefaultTarget;
+	mDefaultTarget = nullptr;
+
 	::GdiplusShutdown(mGDIPToken);
 }
 
@@ -107,18 +114,17 @@ void GDIRenderer::setCurrentDC(HDC dc)
 	mCurrentDC = dc;
 }
 
-void GDIRenderer::initialise(int width, int height)
+void GDIRenderer::setRenderSize(int width, int height)
 {
-	mDefaultTarget = new GDIRenderTarget(this, width, height);
+	mRenderSize.width = width;
+	mRenderSize.height = height;
+
+	mDefaultTarget->resize(width, height);
 }
 
-void GDIRenderer::uninitialise()
+const SizeI& GDIRenderer::getRenderSize()const
 {
-	//ÊÍ·Åsharedptr
-	mTextureMap.clear();
-
-	if (mDefaultTarget) delete mDefaultTarget;
-	mDefaultTarget = nullptr;
+	return mRenderSize;
 }
 
 //================================================================================
@@ -168,13 +174,3 @@ void GDIRenderer::fillRect(const RectI& rect, const Colour& color)
 	graphics.FillRectangle(&brush, rect.left, rect.top, rect.width(), rect.height());
 }
 
-//void GDIRenderer::render(HDC windc, size_t width, size_t height)
-//{
-//	BLENDFUNCTION bf;
-//	bf.BlendOp = AC_SRC_OVER;
-//	bf.BlendFlags = 0;
-//	bf.SourceConstantAlpha = 255;
-//	bf.AlphaFormat = AC_SRC_ALPHA;
-//	// pDC->BitBlt(0,0,50,50,&dc2,0,0,SRCCOPY);
-//	::AlphaBlend(windc, 0, 0, width, height, mDC, 0, 0, width, height, bf);
-//}

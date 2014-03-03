@@ -90,9 +90,12 @@ void WindowHelper::registerBaseFunctions(Window* win)
 					ObjectPtr& pos = arr->get(L"position");
 					if (pos.isNull() || pos->val->type != OT_ARRAY) return false;
 
-					if (!getfloat(x, L"x", pos->val->arr)) return false;
-					if (!getfloat(y, L"y", pos->val->arr)) return false;
-					if (!getfloat(z, L"z", pos->val->arr)) return false;
+					if (!getfloat(x, L"x", pos->val->arr)) 
+						return false;
+					if (!getfloat(y, L"y", pos->val->arr)) 
+						return false;
+					if (!getfloat(z, L"z", pos->val->arr)) 
+						return false;
 
 					vert.position = Vector3(x, y, z);
 

@@ -5,6 +5,7 @@
 #include "Touten.h"
 #include "TTBind.h"
 #include "TTMemoryAllocator.h"
+#include <Windows.h>
 
 using namespace ST;
 
@@ -15,12 +16,36 @@ WindowSystem::WindowSystem()
 
 	mDefaultRenderer = nullptr;
 	mROFactorys[RenderObjectFactory::NAME] = &mDefaultROFactory;
+
+	registerFunction();
 }
 
 WindowSystem::~WindowSystem()
 {
 	delete mBind;
 	delete mTouten;
+}
+
+void WindowSystem::registerFunction()
+{
+	using namespace TT;
+	class BaseFunction
+	{
+	public:
+		static int getScreenWidth()
+		{
+			return GetSystemMetrics(SM_CXSCREEN);
+		}
+
+		static int getScreenHeight()
+		{
+			return GetSystemMetrics(SM_CYSCREEN);
+		}
+	};
+
+	mBind->bind(L"getScreenWidth", BaseFunction::getScreenWidth);
+	mBind->bind(L"getScreenHeight", BaseFunction::getScreenHeight);
+
 }
 
 WindowRenderer* WindowSystem::getRenderer(const String& name)

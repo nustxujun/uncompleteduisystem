@@ -37,8 +37,7 @@ namespace ST
 		TT::Bind* getScriptBind();
 
 	private:
-		void initialize();
-		void uninitialize();
+		void registerFunction();
 
 	private:
 		using Renderers = std::hash_map<String, WindowRenderer*>;

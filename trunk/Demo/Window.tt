@@ -63,9 +63,9 @@ function OnMouseLeave(x, y)
 	$mouseButtonLeft = false;
 }
 
-function CreateChild(name, paras)
+function CreateChild(name, paras, fac)
 {
-	$createChildImpl(name ,paras);
+	$createChildImpl(name ,paras, fac);
 	$_children[name] &= GetWindow(name);
 	return $_children[name];
 }

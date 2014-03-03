@@ -3,6 +3,7 @@
 
 #include "STCommon.h"
 #include "STColour.h"
+#include "STSize.h"
 
 namespace ST
 {
@@ -14,8 +15,8 @@ namespace ST
 
 		virtual void fill(const Colour& color) = 0;
 
-		virtual size_t getWidth()const = 0;
-		virtual size_t getHeight()const = 0;
+		virtual const SizeI& getSize()const = 0;
+		virtual void resize(int width, int height) = 0;
 	};
 }
 
