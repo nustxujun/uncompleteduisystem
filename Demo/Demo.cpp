@@ -41,10 +41,49 @@ struct REC
 };
 std::map<int, REC > memrecord;
 
+class Meminfo
+{
+public:
+	void* ptr;
+	size_t size;
+
+	bool operator<(const Meminfo& inf)const
+	{
+		if (ptr < inf.ptr)
+		{
+			if ((size_t)ptr + size < (size_t)inf.ptr)
+				return true;
+			else
+				throw 1;
+		}
+		else return false;
+	}
+};
+
+std::set<Meminfo> ptrset;
 void* alloc(void* optr, size_t nsize)
 {
-#ifndef _DEBUG
-	return ::realloc(optr, nsize);
+#if	1
+//#ifndef _DEBUG
+	//if (optr)
+	//{
+	//	Meminfo mi;
+	//	mi.ptr = optr;
+	//	mi.size = 0;
+	//	ptrset.erase(mi);
+	//}
+	void* ptr = ::realloc(optr, nsize);
+	//if (nsize)
+	//{
+	//	Meminfo mi;
+	//	mi.ptr = ptr;
+	//	mi.size = nsize;
+
+	//	if (!ptrset.insert(mi).second)
+	//		throw 1;
+	//}
+
+	return ptr;
 #else
 	if (nsize == 0)
 	{
@@ -55,6 +94,7 @@ void* alloc(void* optr, size_t nsize)
 		memrecord[*s].addr.erase(optr);
 		printf("%x total:%10d, current:- %d\n",s, memsize, *s);
 #endif
+		//memset(s, 0xfe, *s + 1);
 		::free(s);
 	}
 	else
@@ -100,15 +140,14 @@ void Print(const ST::String& text)
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	const int winWidth = 640;
-	const int winHeight = 480;
-
+	int winWidth = GetSystemMetrics(SM_CXSCREEN);
+	int winHeight = GetSystemMetrics(SM_CYSCREEN);
 
 	using namespace ST;
 	{
 		TT::MemoryAllocator::setupMethod(alloc);
 		WindowSystem ws;
-		GDIRenderer renderer;
+		GDIRenderer renderer(winWidth, winHeight);
 		GDIRenderWindowFactory rwFactory;
 		BasicImageFactory biFactory;
 		RenderWindowEventProcessor rwep;
@@ -122,7 +161,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		//ws.loadScript(L"test.tt");
 		
 
-		renderer.initialise(winWidth, winHeight);
 		renderer.createTexture(L"back",L"pic.jpg");
 
 		WindowManager wm;
