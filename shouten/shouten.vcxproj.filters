@@ -135,6 +135,9 @@
     <ClInclude Include="STInitializer.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="STSize.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

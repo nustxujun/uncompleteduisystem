@@ -18,8 +18,6 @@ namespace ST
 	template<class T>
 	class Rect
 	{
-	public:
-
 	public :
 		T left, right, top, bottom;
 

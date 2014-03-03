@@ -4,36 +4,43 @@
 using namespace ST;
 
 GDIRenderTarget::GDIRenderTarget(GDIRenderer* renderer, int width, int height) :
-mRenderer(renderer), mHeight(height), mWidth(width)
+mRenderer(renderer), mSize(width, height)
+{
+	createDCObject();
+}
+
+void GDIRenderTarget::createDCObject()
 {
 	HDC screen = ::GetDC(NULL);
 	mDC = ::CreateCompatibleDC(screen);
-	//mBitmap = ::CreateCompatibleBitmap(screen, width, height);
-
 
 	BITMAPINFOHEADER bi = { 0 };
 	bi.biSize = sizeof(bi);
-	bi.biWidth = width;
-	bi.biHeight = height;
+	bi.biWidth = mSize.width;
+	bi.biHeight = mSize.height;
 	bi.biPlanes = 1;
-	bi.biBitCount  = 32;
+	bi.biBitCount = 32;
 	bi.biCompression = BI_RGB;
 	mBitmap = ::CreateDIBSection(screen, (BITMAPINFO*)&bi, 0, (void**)&mBuffer, 0, 0);
 
-	assert(mBitmap);
-
-	HRESULT ret = GetLastError();
+	assert(mBitmap && L"CreateDIBSection failed");
 
 	::ReleaseDC(NULL, screen);
 
-	SelectObject(mDC, mBitmap);
-
+	HGDIOBJ old = SelectObject(mDC, mBitmap);
+	::DeleteObject(old);
 }
 
-GDIRenderTarget::~GDIRenderTarget()
+void GDIRenderTarget::clear()
 {
 	::DeleteObject(mBitmap);
 	::DeleteDC(mDC);
+}
+
+
+GDIRenderTarget::~GDIRenderTarget()
+{
+	clear();
 }
 
 
@@ -50,7 +57,7 @@ void GDIRenderTarget::fill(const Colour& color)
 {
 	activate();
 
-	size_t count = mWidth * mHeight;
+	size_t count = mSize.square();
 
 	//dc上的像素是经过其alpha折算后的值
 	// RGB = srcRGB * A / 255;
@@ -71,14 +78,18 @@ void GDIRenderTarget::fill(const Colour& color)
 
 }
 
-size_t GDIRenderTarget::getWidth()const
+const SizeI& GDIRenderTarget::getSize()const
 {
-	return mWidth;
+	return mSize;
 }
 
-size_t GDIRenderTarget::getHeight()const
+void GDIRenderTarget::resize(int width, int height)
 {
-	return mHeight;
+	mSize.width = width;
+	mSize.height = height;
+
+	clear();
+	createDCObject();
 }
 
 HDC GDIRenderTarget::getDC()

@@ -85,7 +85,7 @@ void GDIRenderWindow::render()
 	size_t winheight = winrect.bottom - winrect.top;
 	POINT dstpos = { winrect.left, winrect.top };
 	POINT srcpos = { 0, 0 };
-	SIZE size = { min(winwidth, target->getWidth()), min(winheight, target->getHeight()) };
+	SIZE size = { min(winwidth, target->getSize().width), min(winheight, target->getSize().height) };
 	BLENDFUNCTION bf = { 0 };
 	bf.AlphaFormat = AC_SRC_ALPHA;
 	bf.BlendFlags = 0;

@@ -17,18 +17,21 @@ namespace ST
 
 		void fill(const Colour& color);
 
-		size_t getWidth()const;
-		size_t getHeight()const;
+		const SizeI& getSize()const ;
+		void resize(int width, int height) ;
 
 		HDC getDC();
+
+	private:
+		void createDCObject();
+		void clear();
 
 	private:
 		HDC mDC;
 		HBITMAP mBitmap;
 		GDIRenderer* mRenderer;
 		void* mBuffer;
-		size_t mHeight;
-		size_t mWidth;
+		SizeI mSize;
 	};
 }
 

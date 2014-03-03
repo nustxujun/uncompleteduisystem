@@ -6,10 +6,10 @@ global function RegisterWindow(winname)
 	return @windowManager[winname];
 }
 
-global function CreateWindow(winname, paras)
+global function CreateWindow(winname, paras, fac)
 {
 	root &= @windowManager.__RootWindow;
-	win &= root.createChild(winname, paras);
+	win &= root.createChild(winname, paras, fac);
 	win.setClippedByParent(false);
 	return win;
 }
@@ -34,6 +34,6 @@ global function InitializeWindowManager()
 	AddRootWindow("__RootWindow");
 	
 	root &= @windowManager.__RootWindow;
-	root.setSize(1024,768);
+	root.setSize(getScreenWidth(),getScreenHeight());
 	root.setMousePassThrough(true);
 }
