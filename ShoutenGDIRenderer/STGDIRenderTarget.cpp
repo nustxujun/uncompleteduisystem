@@ -71,7 +71,8 @@ void GDIRenderTarget::fill(const Colour& color)
 	//ARGB c = color.getAsARGB();
 
 	ARGB* head = (ARGB*)mBuffer;
-	for (size_t i = 0; i < count; ++i)
+	ARGB* end = head + count;
+	while( head < end )
 		*head++ = c;
 
 	deactivate();

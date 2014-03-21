@@ -43,6 +43,7 @@ namespace ST
 		void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, const Colour& color);
 		void drawRect(const RectI& rect, const Colour& color, float width = 1.0f);
 		void drawImage(GDITexture* tex, const RectI& rect);
+		void drawString(const String& cont,int length, const Colour& color, const String& font, const RectI& rect);
 
 		void fillRect(const RectI& rect, const Colour& color);
 

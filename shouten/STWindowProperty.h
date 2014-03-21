@@ -11,6 +11,10 @@ namespace ST
 		static const Char* PROPERTY_NULL;
 		static const Char* BACKGROUND_TEXTURE;
 		static const Char* BACKGROUND_COLOUR;
+		static const Char* TEXT;
+		static const Char* TEXT_FONT;
+		static const Char* TEXT_COLOUR;
+		static const Char* TEXT_LENGTH;
 
 		static const Char* RENDERER;
 		static const Char* RENDER_OBJECT_FACTORY;

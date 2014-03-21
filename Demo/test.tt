@@ -1,7 +1,6 @@
 global function main()
 {	
 	paras.renderobjectfactory = "BasicImageFactory";
-	paras.scriptinitializer = null;
 	paras.backgroundcolour = '0x80000000';
 	win &= CreateWindow("child", paras);
 	win.setSize(200, 100)
@@ -9,31 +8,12 @@ global function main()
 	
 
 	paras1.backgroundcolour = '0x80ff0000';
+	paras1.renderobjectfactory = "GDIFontFactory";
+	paras1.text = 'abc';
+	paras1.textfont ="ËÎÌו";
 	win &= win.createChild("child2", paras1);
-	
-	
-	geom[0].position.x = 0;
-	geom[0].position.y = 0;
-	geom[0].position.z = 0;
-	
-	geom[0].colour.a = 1.0;
-	geom[0].colour.r = 1.0;
-	geom[0].colour.g = 1.0;
-	geom[0].colour.b = 1.0;
-	
-	print(1);
-	geom[1].position.x = 100;
-	print(geom[1].position.x);
-
-
-	geom[1].position.y = 0;
-	geom[1].position.z = 0;
-	
-
-
-	geom[2].position.x = 0;
-	geom[2].position.y = 100;
-	geom[2].position.z = 0;
+	win.setSize(100,50);
+	win.setPosition(0,0);
 	
 
 	

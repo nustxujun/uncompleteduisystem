@@ -63,27 +63,8 @@ public:
 std::set<Meminfo> ptrset;
 void* alloc(void* optr, size_t nsize)
 {
-#if	1
-//#ifndef _DEBUG
-	//if (optr)
-	//{
-	//	Meminfo mi;
-	//	mi.ptr = optr;
-	//	mi.size = 0;
-	//	ptrset.erase(mi);
-	//}
-	void* ptr = ::realloc(optr, nsize);
-	//if (nsize)
-	//{
-	//	Meminfo mi;
-	//	mi.ptr = ptr;
-	//	mi.size = nsize;
-
-	//	if (!ptrset.insert(mi).second)
-	//		throw 1;
-	//}
-
-	return ptr;
+#ifndef _DEBUG
+	return ::realloc(optr, nsize);
 #else
 	if (nsize == 0)
 	{
@@ -127,6 +108,8 @@ void* alloc(void* optr, size_t nsize)
 
 #include "../ShoutenGDIRenderer/STGDIRenderer.h"
 #include "../ShoutenGDIRenderer/STGDIRenderWindow.h"
+#include "../ShoutenGDIRenderer/STGDIFont.h"
+
 #include <iostream>
 //#pragma comment(lib, "Msimg32.lib") 
 #include "../Touten/TTMemoryAllocator.h"
@@ -152,11 +135,15 @@ int _tmain(int argc, _TCHAR* argv[])
 		BasicImageFactory biFactory;
 		RenderWindowEventProcessor rwep;
 
+		GDIFontFactory	ffactory;
+
 		ws.getScriptBind()->bind(L"print", Print);
 
 		ws.addRenderer(L"gdirenderer", &renderer);
 		ws.addRenderObjectFactory(GDIRenderWindowFactory::NAME, &rwFactory);
 		ws.addRenderObjectFactory(BasicImageFactory::NAME, &biFactory);
+		ws.addRenderObjectFactory(GDIFontFactory::NAME, &ffactory);
+
 
 		//ws.loadScript(L"test.tt");
 		
@@ -177,38 +164,19 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		ws.getScriptBind()->call<void>(L"main");
 
-		//CustomParameters paras;
-		//paras[L"renderer"] = L"gdirenderer";
-		//paras[L"renderobjectfactory"] = GDIRenderWindowFactory::NAME;
-		//paras[WindowProperty::BACKGROUND_COLOUR] = L"0x00000000";
-		//paras[WindowProperty::SCRIPT_INITIALIZER] = L"InitializeRenderWindow";
-		//Window* w = wm.createWindow(L"root", &paras);
-		//w->setPosition(100, 100);
-		//w->setSize(winWidth, winHeight);
-		//w->setProperty(WindowProperty::BACKGROUND_COLOUR, L"0,0,0,0");
-		//w->setProperty(WindowProperty::BACKGROUND_TEXTURE, L"back");
-		//ws.addRenderRoot(w);
+	
 
-		//paras[L"renderobjectfactory"] = BasicImageFactory::NAME;
-		//paras[WindowProperty::BACKGROUND_COLOUR] = L"0x80ff0000";
-		//paras[WindowProperty::SCRIPT_INITIALIZER] = L"InitializeWindow";
-		//w = w->createChild(L"child", &paras);
-		//w->setSize(100, 50);
-		//w->setPosition(0, 0);
-
-		//paras[L"renderobjectfactory"] = BasicImageFactory::NAME;
-		//paras[WindowProperty::BACKGROUND_COLOUR] = L"0x80ffff00";
-		//paras[WindowProperty::SCRIPT_INITIALIZER] = L"InitializeWindow";
-		//w = w->createChild(L"child1", &paras);
-		//w->setSize(50, 25);
-		//w->setPosition(0, 0);
-
+		Window* w = wm.getWindow(L"child2");
+		DWORD timer = GetTickCount();
 		while (true)
 		{
 			RenderWindowEventProcessor::pumpMessage();
 		
 			ws.render();
-			
+			DWORD t = GetTickCount() - timer;
+			double fps =  (double)t;
+			w->setProperty(L"text", StringUtil::toString(fps));
+			timer = GetTickCount();
 		}
 
 
