@@ -12,4 +12,6 @@
 #include "STRenderObject.h"
 #include "STBasicImage.h"
 
+#include "STStringUtil.h"
+
 #endif

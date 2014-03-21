@@ -138,6 +138,9 @@
     <ClInclude Include="STSize.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="STFont.h">
+      <Filter>Render\RenderObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -80,82 +80,85 @@ void GDIGeometry::draw(const Matrix4& mat)const
 		mRenderer->drawImage((GDITexture*)mTexture.get(), mRect);
 		return;
 	}
-
-	Colour color = mVertexs[0].colour;
-
-	switch (state.primitiveType)
+	else
 	{
 
-	case PT_POINTS:
-		{
-			std::for_each(poss.begin(), poss.end(), [this, poss, color](const Vector3& pos)
-			{
-				mRenderer->drawPoint(pos.x, pos.y, color);
-			});
-		}
-		break;
-	case PT_LINELIST:
-		{
-			size_t count = poss.size() & (~1);
-			for (size_t i = 0; i < count;)
-			{
-				const Vector3& pos1 = poss[i];
-				const Vector3& pos2 = poss[i + 1];
-				mRenderer->drawLine(pos1.x, pos1.y,
-					pos2.x, pos2.y,
-					color);
+		Colour color = mVertexs[0].colour;
 
-				i += 2;
+		switch (state.primitiveType)
+		{
+
+			case PT_POINTS:
+			{
+				std::for_each(poss.begin(), poss.end(), [this, poss, color](const Vector3& pos)
+				{
+					mRenderer->drawPoint(pos.x, pos.y, color);
+				});
 			}
-		}
 			break;
-	case PT_LINESTRIP:
-		{
-			size_t count = poss.size() - 1;
-			for (size_t i = 0; i < count; ++i)
+			case PT_LINELIST:
 			{
-				const Vector3& pos1 = poss[i];
-				const Vector3& pos2 = poss[i + 1];
-				mRenderer->drawLine(pos1.x, pos1.y,
-					pos2.x, pos2.y,
-					color);
-			}
-		}
-		break;
-	case PT_TRIANGLELIST:
-		{
-			size_t count = poss.size() / 3;
-			for (size_t i = 0; i < count; ++i)
-			{
-				const Vector3& pos1 = poss[i * 3 + 0];
-				const Vector3& pos2 = poss[i * 3 + 1];
-				const Vector3& pos3 = poss[i * 3 + 2];
-				mRenderer->drawTriangle(pos1.x, pos1.y,
-					pos2.x, pos2.y,
-					pos3.x, pos3.y,
-					color);
-			}
+				size_t count = poss.size() & (~1);
+				for (size_t i = 0; i < count;)
+				{
+					const Vector3& pos1 = poss[i];
+					const Vector3& pos2 = poss[i + 1];
+					mRenderer->drawLine(pos1.x, pos1.y,
+										pos2.x, pos2.y,
+										color);
 
-		}
-		break;
-	case PT_TRIANGLESTRIP:
-		{
-			size_t count = poss.size() - 2;
-			for (size_t i = 0; i < count; ++i)
-			{
-				const Vector3& pos1 = poss[i + 0];
-				const Vector3& pos2 = poss[i + 1];
-				const Vector3& pos3 = poss[i + 2];
-				mRenderer->drawTriangle(pos1.x, pos1.y,
-					pos2.x, pos2.y,
-					pos3.x, pos3.y,
-					color);
+					i += 2;
+				}
 			}
+			break;
+			case PT_LINESTRIP:
+			{
+				size_t count = poss.size() - 1;
+				for (size_t i = 0; i < count; ++i)
+				{
+					const Vector3& pos1 = poss[i];
+					const Vector3& pos2 = poss[i + 1];
+					mRenderer->drawLine(pos1.x, pos1.y,
+										pos2.x, pos2.y,
+										color);
+				}
+			}
+			break;
+			case PT_TRIANGLELIST:
+			{
+				size_t count = poss.size() / 3;
+				for (size_t i = 0; i < count; ++i)
+				{
+					const Vector3& pos1 = poss[i * 3 + 0];
+					const Vector3& pos2 = poss[i * 3 + 1];
+					const Vector3& pos3 = poss[i * 3 + 2];
+					mRenderer->drawTriangle(pos1.x, pos1.y,
+											pos2.x, pos2.y,
+											pos3.x, pos3.y,
+											color);
+				}
+
+			}
+			break;
+			case PT_TRIANGLESTRIP:
+			{
+				size_t count = poss.size() - 2;
+				for (size_t i = 0; i < count; ++i)
+				{
+					const Vector3& pos1 = poss[i + 0];
+					const Vector3& pos2 = poss[i + 1];
+					const Vector3& pos3 = poss[i + 2];
+					mRenderer->drawTriangle(pos1.x, pos1.y,
+											pos2.x, pos2.y,
+											pos3.x, pos3.y,
+											color);
+				}
+			}
+			break;
+			case PT_TRIANGLEFAN:
+			{}
+			break;
 		}
-		break;
-	case PT_TRIANGLEFAN:
-	{}
-		break;
 
 	}
 

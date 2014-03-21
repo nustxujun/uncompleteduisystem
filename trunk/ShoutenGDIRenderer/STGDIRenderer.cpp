@@ -167,6 +167,18 @@ void GDIRenderer::drawImage(GDITexture* tex, const RectI& rect)
 
 }
 
+void GDIRenderer::drawString(const String& cont, int length, const Colour& color, const String& font, const RectI& rect)
+{
+	Gdiplus::Graphics graphics(mCurrentDC);
+	Gdiplus::SolidBrush  brush(Gdiplus::Color(color.getAsARGB()));
+	Gdiplus::Font fonttype(font.c_str(), length, FontStyleRegular, UnitPixel);
+	Gdiplus::RectF r(rect.left, rect.top, rect.width(), rect.height());
+	Gdiplus::StringFormat sf;
+	graphics.DrawString(cont.c_str(), -1, &fonttype, r, &sf, &brush);
+
+}
+
+
 void GDIRenderer::fillRect(const RectI& rect, const Colour& color)
 {
 	Gdiplus::Graphics graphics(mCurrentDC);

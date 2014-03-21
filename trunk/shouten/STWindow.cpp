@@ -388,7 +388,7 @@ void Window::dirty(unsigned int type)
 
 bool Window::isDirty(unsigned int type) const
 {
-	return mDirty != DT_CLEAR;
+	return (mDirty & type) != DT_CLEAR;
 }
 
 bool Window::isMousePassThroughEnabled()const
@@ -412,23 +412,33 @@ void Window::setClippedByParent(bool val)
 	mClippedByParent = val;
 }
 
+bool down = false;
+
+
 //event
+
 void Window::injectMouseMove(int posx, int posy, int deltax, int deltay)
 {
-	WindowSystem::getSingleton().getScriptBind()->
-		call<void>(ScriptObject::INJECT_MOUSE_MOVE, mName.c_str(), posx, posy, deltax, deltay);
+	if (down)
+	{
+		mRect.move(deltax, deltay);
+	}
+	//WindowSystem::getSingleton().getScriptBind()->
+	//	call<void>(ScriptObject::INJECT_MOUSE_MOVE, mName.c_str(), posx, posy, deltax, deltay);
 }
 
 void Window::injectMouseButtonDown(Mouse::MouseButton btn)
 {
-	WindowSystem::getSingleton().getScriptBind()->
-		call<void>(ScriptObject::INJECT_MOUSE_BUTTON_DOWN, mName.c_str(), btn);
+	down = true;
+	//WindowSystem::getSingleton().getScriptBind()->
+	//	call<void>(ScriptObject::INJECT_MOUSE_BUTTON_DOWN, mName.c_str(), btn);
 }
 
 void Window::injectMouseButtonUp(Mouse::MouseButton btn)
 {
-	WindowSystem::getSingleton().getScriptBind()->
-		call<void>(ScriptObject::INJECT_MOUSE_BUTTON_UP, mName.c_str(), btn);
+	down = false;
+	//WindowSystem::getSingleton().getScriptBind()->
+	//	call<void>(ScriptObject::INJECT_MOUSE_BUTTON_UP, mName.c_str(), btn);
 }
 
 void Window::injectMouseWheel(float delta)

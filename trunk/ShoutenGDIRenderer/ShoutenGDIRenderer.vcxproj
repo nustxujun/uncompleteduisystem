@@ -66,7 +66,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <Optimization>Disabled</Optimization>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;SHOUTEN_GDIRENDERER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="STGDIFont.h" />
     <ClInclude Include="STGDIGeometry.h" />
     <ClInclude Include="STGDIRenderer.h" />
     <ClInclude Include="STGDIRendererCommon.h" />
@@ -97,6 +98,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="STGDIFont.cpp" />
     <ClCompile Include="STGDIGeometry.cpp" />
     <ClCompile Include="ShoutenGDIRenderer.cpp" />
     <ClCompile Include="stdafx.cpp" />
