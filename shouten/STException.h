@@ -19,7 +19,7 @@ namespace ST
 		String mType;
 	};
 
-#define ST_EXCEPT(x, y) {throw Exception(x, y);}
+#define ST_EXCEPT(x, y) {throw Exception((x), (y));}
 }
 
 #endif

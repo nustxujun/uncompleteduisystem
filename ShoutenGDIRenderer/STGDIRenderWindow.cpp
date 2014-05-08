@@ -27,8 +27,8 @@ RenderWindow(win, renderer)
 	::RegisterClassEx(&wc);
 
 
-	//int width = win->getWidth() ? win->getWidth() : CW_USEDEFAULT;
-	//int height = win->getHeight() ? win->getHeight() : CW_USEDEFAULT;
+	int width = win->getWidth() ? win->getWidth() : 1;
+	int height = win->getHeight() ? win->getHeight() : 1;
 
 	const RectI& rect = win->getRect();
 
@@ -36,7 +36,7 @@ RenderWindow(win, renderer)
 		win->getName().c_str(), 
 		win->getName().c_str(), 
 		WS_POPUP,
-		CW_USEDEFAULT, CW_USEDEFAULT, 1, 1,//WS_POPUP需要指定宽高
+		CW_USEDEFAULT, CW_USEDEFAULT, width, height,//WS_POPUP需要指定宽高
 		NULL, NULL, instance, NULL);
 
 
@@ -45,19 +45,17 @@ RenderWindow(win, renderer)
 	::ShowWindow(mWnd, SW_SHOW);
 	::UpdateWindow(mWnd);
 
-	RenderWindowEventProcessor::getSingleton().addListener(this);
 }
 
 GDIRenderWindow::~GDIRenderWindow()
 {
-	RenderWindowEventProcessor::getSingleton().removeListener(this);
+
+	::DestroyWindow(mWnd);
 }
 
 RectI GDIRenderWindow::getWorldAABB()
 {
-	RectI rect = getWindow()->getRect();
-	return rect;
-
+	return getWindow()->getRect();
 }
 void GDIRenderWindow::notifyUpdateWindow(unsigned int dirty)
 {

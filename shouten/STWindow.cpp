@@ -37,7 +37,7 @@ void Window::initializeScript()
 	WindowHelper helper;
 	TT::Bind& bind = *WindowSystem::getSingleton().getScriptBind();
 	
-	bind.call<void>(L"RegisterWindow", mName.c_str()); //֪ͨscirpt
+	bind.call<void>(L"RegisterWindow", mName.c_str()); //
 
 
 	helper.registerBaseFunctions(this);
@@ -192,11 +192,11 @@ void Window::update()
 	if (!isDirty()) return;
 	if (isDirty(DT_POSITION))
 	{
-		std::for_each(mChildren.begin(), mChildren.end(),
-					  [](Children::value_type& c)
+
+		for (auto i : mChildren)
 		{
-			c.second->dirty(DT_PARENT_TRANSFORM);
-		});
+			i.second->dirty(DT_PARENT_TRANSFORM);
+		}
 
 		mWorldAABBInvalid = true;
 	}
@@ -216,11 +216,10 @@ void Window::draw()
 
 	mRenderObject->render();
 
-	std::for_each(mChildren.begin(), mChildren.end(),
-		[](Children::value_type& c)
-		{
-			c.second->draw();
-		});
+	for (auto child : mChildren)
+	{
+		child.second->draw();
+	}
 }
 
 const RectF& Window::getWorldAABB()
@@ -412,33 +411,25 @@ void Window::setClippedByParent(bool val)
 	mClippedByParent = val;
 }
 
-bool down = false;
-
 
 //event
 
 void Window::injectMouseMove(int posx, int posy, int deltax, int deltay)
 {
-	if (down)
-	{
-		mRect.move(deltax, deltay);
-	}
-	//WindowSystem::getSingleton().getScriptBind()->
-	//	call<void>(ScriptObject::INJECT_MOUSE_MOVE, mName.c_str(), posx, posy, deltax, deltay);
+	WindowSystem::getSingleton().getScriptBind()->
+		call<void>(ScriptObject::INJECT_MOUSE_MOVE, mName.c_str(), posx, posy, deltax, deltay);
 }
 
 void Window::injectMouseButtonDown(Mouse::MouseButton btn)
 {
-	down = true;
-	//WindowSystem::getSingleton().getScriptBind()->
-	//	call<void>(ScriptObject::INJECT_MOUSE_BUTTON_DOWN, mName.c_str(), btn);
+	WindowSystem::getSingleton().getScriptBind()->
+		call<void>(ScriptObject::INJECT_MOUSE_BUTTON_DOWN, mName.c_str(), btn);
 }
 
 void Window::injectMouseButtonUp(Mouse::MouseButton btn)
 {
-	down = false;
-	//WindowSystem::getSingleton().getScriptBind()->
-	//	call<void>(ScriptObject::INJECT_MOUSE_BUTTON_UP, mName.c_str(), btn);
+	WindowSystem::getSingleton().getScriptBind()->
+		call<void>(ScriptObject::INJECT_MOUSE_BUTTON_UP, mName.c_str(), btn);
 }
 
 void Window::injectMouseWheel(float delta)

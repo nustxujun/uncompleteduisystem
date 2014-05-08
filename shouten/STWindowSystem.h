@@ -31,10 +31,18 @@ namespace ST
 		RenderObjectFactory* removeRenderObjectFactory(const String& name);
 
 		bool loadScript(const String& filename);
+		TT::Bind* getScriptBind();
 
 		void render();
 
-		TT::Bind* getScriptBind();
+		template<class Func, class... Args>
+		void operateRoot(Func f, Args... args)
+		{
+			for (auto r : mRoots)
+			{
+				(r->*f)(args...);
+			}
+		}
 
 	private:
 		void registerFunction();
